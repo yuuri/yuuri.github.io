@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>一条nginx命令的思考 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,11 +73,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              一条nginx命令的思考
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-09-04
               </span>
               <span>
                 1 min read
@@ -87,7 +87,14 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <pre><code>2&gt;&amp;1 nginx  -V |tr ' ' '\n'
+</code></pre>
+<p>tr 是替换命令</p>
+<p>nginx  -V是显示nginx已安装模块命令</p>
+<p>2&gt;&amp;1 是将错误输出重定向到标准输出 1就是屏幕</p>
+<p>这里为什么需要加上 2&gt;&amp;1 呢？</p>
+<p>如果不加这一句 nginx -V 是直接由nginx返回的 bash的命令是无法调用的</p>
+<p>需要将nginx命令的结果封装一层 把结果给bash 才能执行bash的命令。</p>
 
               </div>
               <div class="toc-container">
@@ -100,9 +107,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/rabbitmq-yu-mysql-an-zhuang">
               <h3 class="post-title">
-                更新vim到8.1
+                RabbitMQ与MySQL安装
               </h3>
             </a>
           </div>

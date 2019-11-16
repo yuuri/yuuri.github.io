@@ -1,0 +1,319 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alembic使用 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yuuri/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yuuri">
+  <img class="avatar" src="https://github.com/yuuri/images/avatar.png?v=1573876898580" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Alembic使用
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-16
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>随着项目业务需求的不断变更，数据库的表结构修改难以避免，此时就需要对数据库的修改加以记录和控制，便于项目的版本管理和随意的升级和降级。</p>
+<p>Alembic就可以很好的解决这个问题。Alembic是SQLAlchemy作者开发的Python数据库版本管理工具。</p>
+<h2 id="安装">安装</h2>
+<hr>
+<pre><code>pip install alembic
+</code></pre>
+<p>通过pip命令安装，如果使用虚拟环境，记得激活虚拟环境后再执行pip命令</p>
+<p>同时需要安装的还有SQLAlchemy和PyMysql</p>
+<pre><code>pip install sqlalchemy
+pip install pymysql
+</code></pre>
+<h2 id="初始化">初始化</h2>
+<hr>
+<p>在使用alembic之前，需要进行初始化操作。</p>
+<pre><code>alembic init &lt;YOUR_ALEMBIC_DIR&gt;
+</code></pre>
+<p>YOUR_ALEMBIC_DIR，可以取一个符合项目名称规范的目录名，如</p>
+<pre><code>alembic init alembic
+</code></pre>
+<p><strong>此时需要注意，如果之前是在虚拟环境中安装的alembic，需要激活虚拟环境后，在执行上述命令。</strong></p>
+<p><strong>同时，建议cd到项目根目录再执行初始化操作，因为YOUR_ALEMBIC_DIR会在当前目录下创建。</strong></p>
+<p>显示类似结果即初始化成功。</p>
+<pre><code>Creating directory D:\Project\py_sqlalchemy_demo\alembic ... done
+Creating directory D:\Project\py_sqlalchemy_demo\alembic\versions ... done
+Generating D:\Project\py_sqlalchemy_demo\alembic.ini ... done
+Generating D:\Project\py_sqlalchemy_demo\alembic\env.py ... done
+Generating D:\Project\py_sqlalchemy_demo\alembic\README ... done
+Generating D:\Project\py_sqlalchemy_demo\alembic\script.py.mako ... done
+Please edit configuration/connection/logging settings in 'D:\\Project\\py_sqlalchemy_demo\\alembic.ini' befor
+e proceeding.
+</code></pre>
+<p>初始化成功后，会在执行初始化命令的目录下，生成一个alembic.ini的配置文件，及一个alembic目录，目录名就是之前设置的YOUR_ALEMBIC_DIR。</p>
+<h2 id="修改配置文件">修改配置文件</h2>
+<hr>
+<p>接下来对alembic.ini的信息进行修改。</p>
+<p>主要修改的是配置文件中的数据库连接部分。</p>
+<pre><code>sqlalchemy.url = driver://user:pass@localhost:port/dbname
+</code></pre>
+<p>将配置文件中，此部分替换成对应的数据库连接，这个数据库连接的写法是与SQLAlchemy创建engine时是一样的。</p>
+<p>如我在demo中使用的是SQLAlchemy与PyMysql，那数据库连接就是类似如下</p>
+<pre><code>mysql+pymysql://demo_user:demo123456@127.0.0.1:3306/demo_db
+</code></pre>
+<h2 id="修改envpy">修改env.py</h2>
+<hr>
+<p>除修改配置文件外，还需要对YOUR_ALEMBIC_DIR目录下的env.py文件进行修改。</p>
+<p>在env.py中，将target_metadata设置成项目的model，使alembic能获取到项目中model定义的信息。</p>
+<p>将原先的</p>
+<pre><code>target_metadata = None
+</code></pre>
+<p>修改成项目中的model</p>
+<pre><code>import os
+import sys
+# 此处需要将项目路径添加到sys.path，否则from import时找不到models
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + &quot;/../&quot;)
+from models.base import BaseModel
+target_metadata = BaseModel.metadata
+</code></pre>
+<h2 id="创建新版本">创建新版本</h2>
+<hr>
+<p>用 alembic revision -m+注释 创建数据库版本</p>
+<pre><code>alembic revision --autogenerate -m &quot;init_db&quot;
+</code></pre>
+<p>运行后，类似如下结果，即创建版本成功</p>
+<pre><code>INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.autogenerate.compare] Detected removed table 'user'
+Generating D:\Project\py_sqlalchemy_demo\alembic\versions\7b55b3d83158_create_tables.py ... done
+</code></pre>
+<p>每次修改过SQLAlchemy的model，执行此命令即可创建对应的版本。</p>
+<p>执行成功后，会在项目根目录下的alembic/versions/下生成的对应版本的py文件。命令规则是版本号+注释。(这个命名规则是在配置文件中定义的)</p>
+<p>在每次创建新版本后，需要执行将数据库升级到新版本的命令，才能继续更新版本。</p>
+<h2 id="变更数据库">变更数据库</h2>
+<hr>
+<p>在每次创建新版本后，需要执行将数据库升级到新版本的命令，才能继续更新版本</p>
+<p><strong>将数据库升级到最新版本</strong></p>
+<pre><code>alembic upgrade head
+</code></pre>
+<p>运行结果类似</p>
+<pre><code>(venv_win) D:\Project\py_sqlalchemy_demo&gt;alembic upgrade head
+INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 7b55b3d83158 -&gt; b034414f04cd, create tables02
+</code></pre>
+<p>其中，命令中的head和base特指最新版本和最初版本。当需要对数据库进行升级时，使用upgrade，降级使用downgrade。</p>
+<p><strong>将数据库降级到最初版本</strong></p>
+<pre><code>alembic downgrade base
+</code></pre>
+<p><strong>将数据库降级到执行版本</strong>，使用alembic downgrade+版本号，不包含注释部分</p>
+<pre><code>alembic downgrade &lt;version&gt;
+
+</code></pre>
+<p>如</p>
+<pre><code>alembic downgrade 7b55b3d83158
+</code></pre>
+<p>运行结果</p>
+<pre><code>INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade b034414f04cd -&gt; 7b55b3d83158, create tables02
+</code></pre>
+<p>升级也是同样的道理，alembic upgrade+版本号</p>
+<h2 id="离线更新生成sql脚本">离线更新（生成sql脚本）</h2>
+<hr>
+<p>在某些不适合在线更新的情况，可以采用生成sql脚本的形式，进行离线更新：</p>
+<pre><code>alembic upgrade &lt;version&gt; --sql &gt; migration.sql
+</code></pre>
+<p>如：</p>
+<pre><code>alembic upgrade ae1027a6acf --sql &gt; migration.sql
+</code></pre>
+<p>从特定起始版本生成sql脚本：</p>
+<pre><code>alembic upgrade &lt;vsersion&gt;:&lt;vsersion&gt; --sql &gt; migration.sql
+</code></pre>
+<p>如：</p>
+<pre><code>alembic upgrade 1975ea83b712:ae1027a6acf --sql &gt; migration.sql
+
+</code></pre>
+<p>如果是数据库降级操作，把upgrade替换为downgrade。</p>
+<h2 id="查询当前数据库版本号">查询当前数据库版本号</h2>
+<hr>
+<p>在对数据库进行升级或降级后，会在当前操作的数据库中新增一个表；alembic_version。</p>
+<p>表中的version_num字段记录了当前的数据库版本号。</p>
+<h2 id="清除所有版本">清除所有版本</h2>
+<hr>
+<p>如果需要清除所有的版本，将versions删除掉，同时删除数据库的alembic_version表。</p>
+<p>mysql使用utf8cm4</p>
+<p><a href="https://blog.csdn.net/hzw19920329/article/details/55670782">https://blog.csdn.net/hzw19920329/article/details/55670782</a></p>
+<p>1.修改配置文件</p>
+<pre><code>[client]
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4
+
+[mysqld]
+character-set-client-handshake = FALSE
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+init_connect='SET NAMES utf8mb4'
+sql_mode=&quot;ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION&quot;
+</code></pre>
+<p>重启，使配置生效</p>
+<p>2.查询更改后的编码格式</p>
+<pre><code>SHOW VARIABLES WHERE Variable_name LIKE 'character_set_%' OR Variable_name LIKE 'collation%';
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
+<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96">初始化</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">修改配置文件</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9envpy">修改env.py</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E7%89%88%E6%9C%AC">创建新版本</a></li>
+<li><a href="#%E5%8F%98%E6%9B%B4%E6%95%B0%E6%8D%AE%E5%BA%93">变更数据库</a></li>
+<li><a href="#%E7%A6%BB%E7%BA%BF%E6%9B%B4%E6%96%B0%E7%94%9F%E6%88%90sql%E8%84%9A%E6%9C%AC">离线更新（生成sql脚本）</a></li>
+<li><a href="#%E6%9F%A5%E8%AF%A2%E5%BD%93%E5%89%8D%E6%95%B0%E6%8D%AE%E5%BA%93%E7%89%88%E6%9C%AC%E5%8F%B7">查询当前数据库版本号</a></li>
+<li><a href="#%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89%E7%89%88%E6%9C%AC">清除所有版本</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yuuri/post/elasticsearch-cha-jian-an-zhuang">
+              <h3 class="post-title">
+                Elasticsearch 插件安装
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yuuri/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

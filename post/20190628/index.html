@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>20190628 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,21 +73,67 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              20190628
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-06-28
               </span>
               <span>
-                1 min read
+                3 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>1.python file seek方法</p>
+<p>seek()方法语法如下</p>
+<pre><code class="language-python">fileobject.seek(offset[,whence])
+</code></pre>
+<p>参数</p>
+<p>` offset 起始偏移量</p>
+<p>`whence 可选，默认值为0.给offset 参数一个定义 表示从哪个位置开始偏移 0代表从文件开头开始算起，1代表从当前位置开始算起，2代表从文件末尾算起。</p>
+<ol start="2">
+<li></li>
+</ol>
+<pre><code class="language-shell">python -m py_compile file.py
+</code></pre>
+<p>编译成pyc文件。</p>
+<p>用</p>
+<pre><code class="language-shell">python -O -m py_compile file.py
+</code></pre>
+<p>编译成pyo文件</p>
+<p>1.其中的 -m 相当于脚本中的import，这里的-m py_compile 相当于上面的 import py_compile<br>
+2.-O 如果改成 -OO 则是删除相应的 pyo文件，具体帮助可以在控制台输入 python -h 查看</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>ConfigParser 是在Python 2.7的模块名， Python 3下模块名更改为configparser</p>
+<p>其中ConfigParser设置配置文件有三个类方法 分别是RawConfigParser,ConfigParser,SafeConfigParser</p>
+<p>4.从Python ConfigParser  read中排除DEFAULT</p>
+<pre><code class="language-python">import ConfigParser
+cf_parser = ConfigParser.ConfigParser()
+cf_parser.read(&quot;sdsagent.conf&quot;)
+[x for x in cf_parser.items(&quot;TEST&quot;) if x[0] not in cf_parser.defaults()]
+</code></pre>
+<pre><code class="language-python">import ConfigParser
+cf_parser = ConfigParser.ConfigParser()
+cf_parser.read(&quot;sdsagent.conf&quot;)
+
+filter_cf = [x for x in cf_parser.items(&quot;TEST&quot;) if x[0] not in cf_parser.defaults()]
+print cf_parser.items(&quot;TEST&quot;)
+print filter_cf
+cf_dict = dict()
+for i in filter_cf:
+    cf_dict.update({i[0]: i[1]})
+print cf_dict
+</code></pre>
+<p>5.如何区分status state</p>
+<p>​	State 表达的是形态，而 Status 表达的是从一种形态转换成另一种形态的过程中，那些有显著特征的离散中间值。</p>
+<p>​        还是说那个旅馆房间的例子，一个房间可以是婚房、普通房、豪华总统房，这些都是用 State 来表达。把一个普通房改造成豪华总统房，这个过程就有设计、材料准备、工人就位、施工、验收等步骤，这个时候就用 Status 来表达。</p>
+<p>​        那么，区分点在哪？区分点就在于一个房间当用State 描述时，它是个<strong>彼此独立</strong>的枚举值，<strong>可以没有前后顺序</strong>的在婚房、普通房、豪华总统房之间来回转换。而当使用 Status 时，是存在<strong>前后状态依赖关系</strong>的一个变化量，不能没有做设计就施工，也不能没施工就验收。</p>
+<p>​      所以，State 和 Status 的核心区别，就是它们的枚举值之间是否有依赖关系，没有依赖关系的用 State，有依赖关系的用 Status。</p>
 
               </div>
               <div class="toc-container">
@@ -100,9 +146,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/bei-xie-si-fen-lei-qi">
               <h3 class="post-title">
-                更新vim到8.1
+                贝叶斯分类器
               </h3>
             </a>
           </div>

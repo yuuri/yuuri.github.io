@@ -1,0 +1,619 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MySQL语句 3	 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yuuri/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yuuri">
+  <img class="avatar" src="https://github.com/yuuri/images/avatar.png?v=1573876898580" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              MySQL语句 3	
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-26
+              </span>
+              <span>
+                10 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>[TOC]</p>
+<h4 id="1创建计算字段">1.创建计算字段</h4>
+<p>​	与之前的用法不同，计算字段实际上并不存在于数据库中。计算字段是在SELECT语句中创建的。</p>
+<p>​	要注意到，只有数据库自己知道哪些列是实际存在的，哪些列是计算字段。从客户机(应用程序)的角度，计算字段的数据是以与其他字段相同的方式进行返回的。</p>
+<h5 id="1拼接字段">1.拼接字段</h5>
+<p>​	拼接(Concatenate)将值链结到一起构成单个值</p>
+<p>​	在MySQL的SELECT 语句中，可以使用concat()函数来拼接两个列。</p>
+<p>​	<strong>MySQL的不同之处</strong> 其他常见的数据库使用 + 或 ||来实现拼接，MySQL使用concat()函数来实现。</p>
+<pre><code>mysql&gt; select concat(id,'-',project_name) from git_project limit 3;
++-----------------------------+
+| concat(id,'-',project_name) |
++-----------------------------+
+| 1-robbyrussell/oh-my-zsh    |
+| 3-facebook/react            |
+| 5-tensorflow/tensorflow     |
++-----------------------------+
+3 rows in set (0.00 sec)
+</code></pre>
+<p><strong>删除多余空格</strong>  在MySQL中删除右侧多余的空格可以使用RTrim()函数来实现。</p>
+<p><strong>Trim函数</strong> 除了使用RTrim()函数之外，还可以使用LTrim()，与RTrim()函数相似的，LTrim()函数表示去除左边多余的空格。Trim()函数则是去除串两边的空格。‘</p>
+<h5 id="2使用别名">2.使用别名</h5>
+<p>​	SQL支持列别名，别名(alias)是一个是一个字段或一个值的替换名，别名用关键字AS 赋予。</p>
+<p><strong>别名的用途</strong> 别名的用途包括在实际的表列名包含不符合规定的名字时重新命名，以及实际的名字意义不明时扩充它。</p>
+<h5 id="3执行算术计算">3.执行算术计算</h5>
+<p>​	MySQL支持 + - * / 来进行算术操作，圆括号可以用来进行优先级的区分。</p>
+<p><strong>如何测试计算</strong>  算术计算同样可以使用SELECT 来进行测试。虽然SELECT 通常用来从表中检索数据，但可以使用省略FROM子句以便简单的访问和处理表达式。例如SELECT 3*2 将返回6 ，SELECT NOW()将会返回当前时间。</p>
+<h4 id="2使用数据处理函数">2.使用数据处理函数</h4>
+<h5 id="1函数">1.函数</h5>
+<p>与其他计算机语言一样，SQL同样支持利用函数来进行数据处理。函数一般是在数据上执行，给数据的处理和转换带来了方便。</p>
+<p><strong>函数没有SQL可移植性强</strong>   能运行在多个系统上，称之为可移植性，相对来说，大部分SQL时可移植的，在SQL之间存在差异时，处理起来也不是特别难，但是函数大部分时不可移植的。几乎每种DMBS都有一些其他不支持的函数。而且有时候差异很大。</p>
+<h5 id=""></h5>
+<h5 id="2文本处理函数">2.文本处理函数</h5>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Left(str,length)</td>
+<td>返回串左边的字符</td>
+</tr>
+<tr>
+<td>Length()</td>
+<td>返回串的长度</td>
+</tr>
+<tr>
+<td>Locate()</td>
+<td>找回串的一个子串</td>
+</tr>
+<tr>
+<td>Lower()</td>
+<td>将串转为小写</td>
+</tr>
+<tr>
+<td>LTrim()</td>
+<td>去掉串左边的空格</td>
+</tr>
+<tr>
+<td>Right()</td>
+<td>返回串右边的字符</td>
+</tr>
+<tr>
+<td>RTim()</td>
+<td>去掉串右边的空格</td>
+</tr>
+<tr>
+<td>Soundex()</td>
+<td>返回串的soundex值</td>
+</tr>
+<tr>
+<td>Substring()</td>
+<td>返回子串的字符</td>
+</tr>
+<tr>
+<td>Upper()</td>
+<td>将串转换为大写</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-sql">mysql&gt; select Left('Paul N. Liker',3);
++-------------------------+
+| Left('Paul N. Liker',3) |
++-------------------------+
+| Pau                     |
++-------------------------+
+1 row in set (0.00 sec)
+
+</code></pre>
+<pre><code>mysql&gt; select Length('Paul N. Liker');
++-------------------------+
+| Length('Paul N. Liker') |
++-------------------------+
+|                      13 |
++-------------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<pre><code>mysql&gt; select Locate('a','Paul N. Liker');
++-----------------------------+
+| Locate('a','Paul N. Liker') |
++-----------------------------+
+|                           2 |
++-----------------------------+
+1 row in set (0.00 sec)
+
+</code></pre>
+<pre><code>mysql&gt; SELECT SUBSTRING('Quadratically',5);
+        -&gt; 'ratically'
+mysql&gt; SELECT SUBSTRING('foobarbar' FROM 4);
+        -&gt; 'barbar'
+mysql&gt; SELECT SUBSTRING('Quadratically',5,6);
+        -&gt; 'ratica'
+mysql&gt; SELECT SUBSTRING('Sakila', -3);
+        -&gt; 'ila'
+mysql&gt; SELECT SUBSTRING('Sakila', -5, 3);
+        -&gt; 'aki'
+mysql&gt; SELECT SUBSTRING('Sakila' FROM -4 FOR 2);
+        -&gt; 'ki'
+</code></pre>
+<p><strong>Soundex函数</strong>    SOUNDEX是将一个将任何文本串转为描述其语音表示的字母数字模式的算法。SOUNDEX考虑了类似的发音字符和音节，使得能对串进行发音比较而不是字母比较。虽然SOUNDEX不是SQL概念，但是MySQL(大多数的DBMS)都提供对SOUNDEX的支持。</p>
+<p>下面给出一个使用Soundex的例子。</p>
+<pre><code>mysql&gt; select Soundex('Paul N. Baker');
++--------------------------+
+| Soundex('Paul N. Baker') |
++--------------------------+
+| P45126                   |
++--------------------------+
+1 row in set (0.01 sec)
+
+mysql&gt; select Soundex('Paul N. Lie');
++------------------------+
+| Soundex('Paul N. Lie') |
++------------------------+
+| P454                   |
++------------------------+
+1 row in set (0.04 sec)
+
+mysql&gt; select Soundex('Paul N. Liker');
++--------------------------+
+| Soundex('Paul N. Liker') |
++--------------------------+
+| P45426                   |
++--------------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<h5 id="3日期处理函数">3.日期处理函数</h5>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AddDate()</td>
+<td>增加一个日期(天,周)</td>
+</tr>
+<tr>
+<td>AddTime()</td>
+<td>增加一个日期(时,分)</td>
+</tr>
+<tr>
+<td>CurDate()</td>
+<td>返回当前日期</td>
+</tr>
+<tr>
+<td>CurTime()</td>
+<td>返回当前时间</td>
+</tr>
+<tr>
+<td>Date()</td>
+<td>返回日期时间的日期部分</td>
+</tr>
+<tr>
+<td>DateDiff()</td>
+<td>计算两个日期之间的差值</td>
+</tr>
+<tr>
+<td>Date_add()</td>
+<td>高度灵活的日期运算函数</td>
+</tr>
+<tr>
+<td>Date_Format()</td>
+<td>返回一个格式化的日期或时间串</td>
+</tr>
+<tr>
+<td>Day()</td>
+<td>返回一个日期的天数部分</td>
+</tr>
+<tr>
+<td>DayOfWeek()</td>
+<td>对于一个日期，返回对应的星期几</td>
+</tr>
+<tr>
+<td>Hour()</td>
+<td>返回一个时间的小时部分</td>
+</tr>
+<tr>
+<td>Minute()</td>
+<td>返回一个时间的分钟部分</td>
+</tr>
+<tr>
+<td>Month()</td>
+<td>返回一个日期的月份部分</td>
+</tr>
+<tr>
+<td>Now()</td>
+<td>返回当前日期和时间</td>
+</tr>
+<tr>
+<td>Second()</td>
+<td>返回一个时间的秒部分</td>
+</tr>
+<tr>
+<td>Time()</td>
+<td>返回一个日期时间的时间部分</td>
+</tr>
+<tr>
+<td>Year()</td>
+<td>返回一个日期的年份部分</td>
+</tr>
+</tbody>
+</table>
+<p><strong>如果要的是日期，请使用Date()</strong>   如果你想要的仅是日期，则使用Date()是一个良好的习惯，即使你知道相应的列只包含日期也是如此。这样，如果由于某种原因表中以后有日期和时间值，你的SQL代码也不用改变。当然，也存在一个Time()函数，在你只想要时间时应该使用它</p>
+<h5 id="-2"></h5>
+<h5 id="4数值处理函数">4.数值处理函数</h5>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abs()</td>
+<td>返回一个数的绝对值</td>
+</tr>
+<tr>
+<td>Cos()</td>
+<td>返回一个角度的余弦</td>
+</tr>
+<tr>
+<td>Exp()</td>
+<td>返回一个数的指数值</td>
+</tr>
+<tr>
+<td>Mod()</td>
+<td>返回一个除操作的余</td>
+</tr>
+<tr>
+<td>Pi()</td>
+<td>返回圆周率</td>
+</tr>
+<tr>
+<td>Rand()</td>
+<td>返回一个随机数</td>
+</tr>
+<tr>
+<td>Sin()</td>
+<td>返回一个角度的正弦</td>
+</tr>
+<tr>
+<td>Sqrt()</td>
+<td>返回一个数的平方根</td>
+</tr>
+<tr>
+<td>Tan()</td>
+<td>返回一个角度的正切</td>
+</tr>
+</tbody>
+</table>
+<h5 id="5聚集函数">5.聚集函数</h5>
+<p><strong>聚集函数</strong> 运行在行组上，计算和返回单个值的函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AVG()</td>
+<td>返回某列的平均值</td>
+</tr>
+<tr>
+<td>COUNT()</td>
+<td>返回某列的行数</td>
+</tr>
+<tr>
+<td>MAX()</td>
+<td>返回某列的最大值</td>
+</tr>
+<tr>
+<td>MIN()</td>
+<td>返回某列的最小值</td>
+</tr>
+<tr>
+<td>SUM()</td>
+<td>返回某列值之和</td>
+</tr>
+</tbody>
+</table>
+<h6 id="avg函数">AVG()函数</h6>
+<p><strong>只能用于单个列</strong>  AVG()只能用来确定特定数列值的平均值，而且列明必须作为函数参数给出。为了获得多个列的值，必须使用多个AVG()函数</p>
+<p><strong>NULL值</strong> AVG()函数忽略值为NULL 的行</p>
+<h6 id="count函数">COUNT()函数</h6>
+<p>COUNT()函数有两种使用方法：</p>
+<p>1.COUNT(*) 对表中行的数量进行计算，不管列中包含空值（NULL）还是不包含空值。</p>
+<p>2.COUNT(column) 对特定列中具有值的函数进行计数，忽略NULL值</p>
+<h6 id="maxmin函数">MAX,MIN函数</h6>
+<p>MAX,MIN函数返回最大值。</p>
+<p><strong>非数值数据使用MAX,MIN函数</strong> 如果对非数值类型数据类型使用MAX MIN函数。MAX()返回最后一行，MIN()返回第一行。MAX,MIN函数均忽略NULL值。</p>
+<h6 id="sum函数">SUM()函数</h6>
+<p>SUM()函数返回只当列和的总计。</p>
+<p><strong>多个列进行计算</strong>  利用标准算术符号，所有聚集函数都可以用来执行多个列上的计算。</p>
+<h5 id="6聚集不同值">6.聚集不同值</h5>
+<p>ALL为默认，如果想要使用不用的值，可以使用DISTINCT关键字。</p>
+<p><strong>注意</strong>   如果指定列名，则DISTINCT只能用于COUNT()。DISTINCT不能用于COUNT(*)，因此不允许使用COUNT（DISTINCT），否则会产生错误。类似地，DISTINCT必须使用列名，不能用于计算或表达式。</p>
+<h5 id="7分组数据">7.分组数据</h5>
+<h6 id="使用group-by-进行分组">使用GROUP BY 进行分组</h6>
+<p>使用GROUP BY 有下面一些规定：</p>
+<p>1.GROUP BY 子句可以包含任意数目的列。这使得能对分组进行嵌套，为数据分组提供更细粒度的控制。</p>
+<p>2.如果在GROUP BY子句嵌套了子句，数据将在最后规定的分组进行汇总。换句话说，建立分组时，所有的数据一同进行计算。(所以不能从个别的列获取数据)。</p>
+<p>3.GROUP BY 子句都必须时检索列或者是有效的表达式，但不能是聚集函数。如果在SELECT中使用表达式，则必须在GROUP BY中指定相同的表达式，不能使用别名。</p>
+<p>4.除聚集函数之外，SELECT语句中每一个列都必须在GROUP BY 子句中给出。</p>
+<p>5.如果分组具有NULL，则NULL将作为一个分组返回，如果列有多个NULL，他们将返回同一个分组。</p>
+<p>6.GROUP BY 子句必须在WHERE 子句之后，ORDER BY子句之前。</p>
+<p>**使用ROLL UP ** 使用ROLL UP 可以得到每一个分组以及每个分组的汇总级别（针对每一个分组）值</p>
+<h6 id="使用having-进行过滤分组">使用HAVING 进行过滤分组</h6>
+<p>HAVIN和WHERE相似，不同之处在于WHERE过滤行，HAVING过滤分组。</p>
+<p><strong>WHERE 和HAVING的区别</strong> 还有一种理解两种的区别之处，可以理解为WHERE在分组之前过滤，HAVING在分组之后进行过滤。因此WHERE过滤掉的值在分组中不会出现，可能会改变计算值，分组如果基于这些值进行过滤，那么就会导致结果会有所不同。</p>
+<h6 id="使用order-by进行排序">使用ORDER BY进行排序</h6>
+<p>分组和排序的区别</p>
+<table>
+<thead>
+<tr>
+<th>OEDER BY</th>
+<th>GROUP BY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>排序产生的输出</td>
+<td>分组行。但可能不是分组的排序</td>
+</tr>
+<tr>
+<td>任意列都可以使用(非选择的列也可以使用)</td>
+<td>只能使用选择的列或者表达式列，而且必须使用每个选择表达式</td>
+</tr>
+<tr>
+<td>不一定需要</td>
+<td>如果和聚集函数一起使用列(表达式),则必须使用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>不要忘记ORDER BY</strong> 一般在使用GROUP BY子句时，应该也给<br>
+出ORDER BY子句。这是保证数据正确排序的唯一方法。千万<br>
+不要仅依赖GROUP BY排序数据。</p>
+<h5 id="8select子句顺序">8.SELECT子句顺序</h5>
+<table>
+<thead>
+<tr>
+<th>子句</th>
+<th>使用说明</th>
+<th>是否必须使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT</td>
+<td>要返回的列或表达式</td>
+<td>是</td>
+</tr>
+<tr>
+<td>FROM</td>
+<td>从中检索数据的表</td>
+<td>仅在表选择数据时使用</td>
+</tr>
+<tr>
+<td>WHERE</td>
+<td>行级过滤</td>
+<td>否</td>
+</tr>
+<tr>
+<td>GROUP BY</td>
+<td>分组过滤</td>
+<td>仅在按组过滤时使用</td>
+</tr>
+<tr>
+<td>HAVING</td>
+<td>组级过滤</td>
+<td>否</td>
+</tr>
+<tr>
+<td>ORDER BY</td>
+<td>输出排序顺序</td>
+<td>否</td>
+</tr>
+<tr>
+<td>LIMIT</td>
+<td>要检索的行数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1%E5%88%9B%E5%BB%BA%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5">1.创建计算字段</a>
+<ul>
+<li><a href="#1%E6%8B%BC%E6%8E%A5%E5%AD%97%E6%AE%B5">1.拼接字段</a></li>
+<li><a href="#2%E4%BD%BF%E7%94%A8%E5%88%AB%E5%90%8D">2.使用别名</a></li>
+<li><a href="#3%E6%89%A7%E8%A1%8C%E7%AE%97%E6%9C%AF%E8%AE%A1%E7%AE%97">3.执行算术计算</a></li>
+</ul>
+</li>
+<li><a href="#2%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0">2.使用数据处理函数</a>
+<ul>
+<li><a href="#1%E5%87%BD%E6%95%B0">1.函数</a></li>
+<li></li>
+<li><a href="#2%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0">2.文本处理函数</a></li>
+<li><a href="#3%E6%97%A5%E6%9C%9F%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0">3.日期处理函数</a></li>
+<li></li>
+<li><a href="#4%E6%95%B0%E5%80%BC%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0">4.数值处理函数</a></li>
+<li><a href="#5%E8%81%9A%E9%9B%86%E5%87%BD%E6%95%B0">5.聚集函数</a>
+<ul>
+<li><a href="#avg%E5%87%BD%E6%95%B0">AVG()函数</a></li>
+<li><a href="#count%E5%87%BD%E6%95%B0">COUNT()函数</a></li>
+<li><a href="#maxmin%E5%87%BD%E6%95%B0">MAX,MIN函数</a></li>
+<li><a href="#sum%E5%87%BD%E6%95%B0">SUM()函数</a></li>
+</ul>
+</li>
+<li><a href="#6%E8%81%9A%E9%9B%86%E4%B8%8D%E5%90%8C%E5%80%BC">6.聚集不同值</a></li>
+<li><a href="#7%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE">7.分组数据</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8group-by-%E8%BF%9B%E8%A1%8C%E5%88%86%E7%BB%84">使用GROUP BY 进行分组</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8having-%E8%BF%9B%E8%A1%8C%E8%BF%87%E6%BB%A4%E5%88%86%E7%BB%84">使用HAVING 进行过滤分组</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8order-by%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F">使用ORDER BY进行排序</a></li>
+</ul>
+</li>
+<li><a href="#8select%E5%AD%90%E5%8F%A5%E9%A1%BA%E5%BA%8F">8.SELECT子句顺序</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yuuri/post/mysql-yu-ju-2">
+              <h3 class="post-title">
+                MySQL 语句2
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yuuri/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

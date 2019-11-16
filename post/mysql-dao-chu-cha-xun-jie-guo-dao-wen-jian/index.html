@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>MySQL 导出查询结果到文件 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,25 +73,75 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              MySQL 导出查询结果到文件
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-09-19
               </span>
               <span>
-                1 min read
+                3 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <h4 id="mysql-导出查询结果到文件">MySQL 导出查询结果到文件</h4>
+<p>输出带自增长序号</p>
+<pre><code>mysql -ugit -pgit -e 'SELECT @num:=@num+1 AS 序号, a.* FROM  git_project a ,(SELECT @num:=0) r;'&gt;project_list.csv
+</code></pre>
+<p>导出到文件</p>
+<pre><code>select * from table into outfile '/tmp/table.csv' fields terminated by ',' optionally enclosed by '&quot;' lines terminated by '\r\n';
+</code></pre>
+<p>遇到问题</p>
+<pre><code>ERROR 1290 (HY000): The MySQL server is running with the --secure-file-priv option so it cannot execute this statement
+</code></pre>
+<p>原因是</p>
+<p>--secure-file-priv参数限制输出文件位置</p>
+<p>使用命令查看参数</p>
+<pre><code>show global variables like '%secure_file_priv%';
+</code></pre>
+<ul>
+<li>secure_file_priv 为 NULL 时，表示限制mysqld不允许导入或导出。</li>
+<li>secure_file_priv 为 /tmp 时，表示限制mysqld只能在/tmp目录中执行导入导出，其他目录不能执行。</li>
+<li>secure_file_priv 没有值时，表示不限制mysqld在任意目录的导入导出。</li>
+</ul>
+<p>windows下：修改my.ini 在[mysqld]内加入secure_file_priv =</p>
+<p>linux下：修改my.cnf 在[mysqld]内加入secure_file_priv =</p>
+<p>MYSQL新特性secure_file_priv对读写文件的影响</p>
+<p>然后重启mysql，再查询secure_file_priv</p>
+<pre><code>SELECT @num:=@num+1 AS 序号, a.* FROM  git_project a ,(SELECT @num:=0) r into outfile '/var/lib/mysql-files/table.csv' fields terminated by ',' optionally enclosed by '&quot;' lines terminated by '\r\n';
+</code></pre>
+<pre><code>SELECT @num:=@num+1 AS 序号, a.project_name FROM  git_project a ,(SELECT @num:=0) r into outfile '/var/lib/mysql-files/table.csv' fields terminated by ',' optionally enclosed by '&quot;' lines terminated by '\r\n';
+</code></pre>
+<p>如果直接在终端上运行可执行如下命令（注意 如果是单个引号，要进行转义 使用 \ 符号）</p>
+<pre><code>mysql -uroot -p2wsx#EDC -D github -e &quot;SELECT @num:=@num+1 AS 序号, a.project_name FROM  git_project a ,(SELECT @num:=0) r into outfile '/var/lib/mysql-files/table.csv' fields terminated by ',' optionally enclosed by '\&quot;' lines terminated by '\r\n'&quot;
+</code></pre>
+<p>使用子查询，对结果进行排序</p>
+<pre><code>mysql -uroot -proot -D git -e &quot;select @num:=@num+1 as 序号,result.file_name as file from (select distinct(a.file_name),a.project from request_file as a where a.project='pytorch/pytorch') as result,(select @num:=0) r&quot;
+</code></pre>
+<pre><code>mysql -uroot -proot -D git -e &quot;select @num:=@num+1 as 序号,result.file_name as file from (select distinct(a.file_name),a.project from request_file as a where a.project='pytorch/pytorch'order by file_name) as result,(select @num:=0) r into outfile '/tmp/distinct_file.csv' fields terminated by ',' optionally enclosed by '\&quot;' lines terminated by '\r\n'&quot;
+</code></pre>
 
               </div>
               <div class="toc-container">
-                
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#mysql-%E5%AF%BC%E5%87%BA%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E5%88%B0%E6%96%87%E4%BB%B6">MySQL 导出查询结果到文件</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
               </div>
             </div>
           </article>
@@ -100,9 +150,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/mysql-cha-xun-shu-ju-zhan-yong-ci-pan-rong-liang">
               <h3 class="post-title">
-                更新vim到8.1
+                MySQL 查询数据占用磁盘容量
               </h3>
             </a>
           </div>

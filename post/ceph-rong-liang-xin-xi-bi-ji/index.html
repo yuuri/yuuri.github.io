@@ -1,0 +1,255 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ceph 容量信息笔记 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yuuri/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yuuri">
+  <img class="avatar" src="https://github.com/yuuri/images/avatar.png?v=1573876898580" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Ceph 容量信息笔记
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-02-24
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://github.com/yuuri/post-images/ceph-rong-liang-xin-xi-bi-ji.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h4 id="集群物理容量-集群数据分配容量">集群物理容量 集群数据分配容量</h4>
+<p>rawUsed 为物理容量中已用容量 rawTotal为物理容量总容量</p>
+<p>dataUsed为数据分配容量已用容量 dataTotal为数据分配容量总容量</p>
+<pre><code class="language-shell">ceph status --format=json   
+</code></pre>
+<p>通过以上命令查询到得数据记为cluster_info</p>
+<p>rawTotal  = cluster_info[&quot;pgmap&quot;] [&quot;bytes_total&quot;]</p>
+<p>rawUsed =  rawTotal  - cluster_info[&quot;pgmap&quot;] [&quot;bytes_avail&quot;]</p>
+<pre><code class="language-shell">ceph df --format=json
+</code></pre>
+<p>通过以上命令查到的数据记为cluster_df_info</p>
+<p>dataUsed =</p>
+<pre><code class="language-python"> for pool in cluster_df_info:
+ 	if pool[&quot;name&quot;] not in [&quot;data&quot;, &quot;meta&quot;]:
+ 		dataUsed += int(pool['stats'][&quot;kb_used&quot;]) * 1024
+</code></pre>
+<p>datatotal 是通过rbd cron 通过rpc 调用agent端函数batch_get_rbd_info() 调用一下命令</p>
+<pre><code class="language-shell">rbd --image volume(rbd_name) -p pool(pool_name) info --format=json
+</code></pre>
+<p>以上数据记为 rbd_info</p>
+<p>通过rbd cron 将所有rbd信息更新到数据库</p>
+<p>通过数据库查询所有的rbd信息得到 rbd_size_query</p>
+<pre><code> for rbd_size in rbd_size_query:
+ 	datatotal += rbd_size.size
+</code></pre>
+<h4 id="数据中心物理容量-数据中心数据分配容量">数据中心物理容量 数据中心数据分配容量</h4>
+<p>physical_capacity_total为物理总容量</p>
+<p>physical_capacity_used 为物理已用容量</p>
+<p>data_capacity_total 为数据总容量</p>
+<p>data_capacity_used 为数据已用容量</p>
+<p>l_group_summary 为通过数据库查询到的logic_group_cron</p>
+<pre><code class="language-python">logic_groups = connection.get_logic_group(p_group.cluster_id, p_group.id)
+for l_group in logic_groups:
+    l_group_summary =connection.get_l_group_summary_by_l_group_id(l_group.id)
+	ret[&quot;physical_capacity_used&quot;] += l_group_summary.physicalused
+	ret[&quot;physical_capacity_total&quot;] += l_group_summary.physicaltotal
+	ret[&quot;data_capacity_used&quot;] += l_group_summary.dataused
+	ret[&quot;data_capacity_total&quot;] += l_group_summary.datatotal
+</code></pre>
+<p>logic_groups_cron 中</p>
+<pre><code class="language-python">summary[&quot;dataused&quot;] += pool.size_kb * 1024
+rbds = conn.query_rbds(pool=pool.name)
+for rbd in rbds:
+    summary[&quot;datatotal&quot;] += rbd.size
+</code></pre>
+<p>physicaltotal 和physicalused 通过查询各个osd的信息相加得到</p>
+<pre><code class="language-python">summary[&quot;physicaltotal&quot;] += osd.avail
+summary[&quot;physicalused&quot;] += osd.used
+</code></pre>
+<p>osd 信息通过osd_cron 发送rpc调用agent端函数 get_osd_status</p>
+<p>osd[avail] 和osd[used]</p>
+<p>首先通过命令</p>
+<pre><code class="language-shell">ceph osd tree --format=json
+</code></pre>
+<p>以上命令查询得到的信息记为nodes_info</p>
+<p>通过查询到nodes_info中type == &quot;host&quot;所在的字典中的children字段 得到osd的id</p>
+<pre><code class="language-shell">ceph pg dump osds --format=json
+</code></pre>
+<p>以上命令获得的信息记为osds_volume</p>
+<pre><code class="language-python">for osd_volume in osds_volume:
+	osd_dict[&quot;used&quot;] = osd_volume[&quot;kb_used&quot;] * 1024
+	osd_dict[&quot;avail&quot;] = osd_volume[&quot;kb&quot;] * 1024
+</code></pre>
+<p>通过以上步骤得到osd信息</p>
+<h4 id="存储池使用容量和总容量">存储池使用容量和总容量</h4>
+<p>使用容量</p>
+<p>size_kb 与size_bytes 均为使用容量 只是单位不同</p>
+<p>quota_bytes 为可用容量即设置的存储池配额 在创建存储池时设定</p>
+<p>size_kb 通过pool_cron  rpc调用agent 端函数get_pool_status</p>
+<p>通过命令</p>
+<pre><code class="language-python">ceph df --format=json
+</code></pre>
+<p>以上信息为记为pool_status</p>
+<pre><code class="language-python">size_kb = pool_status['stats'] [&quot;bytes_used&quot;] /1024
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E9%9B%86%E7%BE%A4%E7%89%A9%E7%90%86%E5%AE%B9%E9%87%8F-%E9%9B%86%E7%BE%A4%E6%95%B0%E6%8D%AE%E5%88%86%E9%85%8D%E5%AE%B9%E9%87%8F">集群物理容量 集群数据分配容量</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E7%89%A9%E7%90%86%E5%AE%B9%E9%87%8F-%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E6%95%B0%E6%8D%AE%E5%88%86%E9%85%8D%E5%AE%B9%E9%87%8F">数据中心物理容量 数据中心数据分配容量</a></li>
+<li><a href="#%E5%AD%98%E5%82%A8%E6%B1%A0%E4%BD%BF%E7%94%A8%E5%AE%B9%E9%87%8F%E5%92%8C%E6%80%BB%E5%AE%B9%E9%87%8F">存储池使用容量和总容量</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yuuri/post/about">
+              <h3 class="post-title">
+                关于
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yuuri/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

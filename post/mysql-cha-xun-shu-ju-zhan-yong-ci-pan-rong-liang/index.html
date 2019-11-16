@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>MySQL 查询数据占用磁盘容量 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,21 +73,45 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              MySQL 查询数据占用磁盘容量
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-09-18
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>查询所有数据占用磁盘容量信息</p>
+<pre><code class="language-mysql">select TABLE_SCHEMA, concat(truncate(sum(data_length)/1024/1024,2),' MB') as data_size,
+concat(truncate(sum(index_length)/1024/1024,2),'MB') as index_size
+from information_schema.tables
+group by TABLE_SCHEMA
+order by data_length desc;
+</code></pre>
+<p>查询单个数据占用磁盘容量信息（TestDB为要查询的数据库）</p>
+<pre><code class="language-mysql">select TABLE_NAME, concat(truncate(data_length/1024/1024,2),' MB') as data_size,
+concat(truncate(index_length/1024/1024,2),' MB') as index_size
+from information_schema.tables where TABLE_SCHEMA = 'TestDB'
+group by TABLE_NAME
+order by data_length desc;
+</code></pre>
+<p>1.TRUNCATE(X,D)</p>
+<p>Returns the number X, truncated to D decimal places. If D is 0, the result has no decimal point or fractional part. D can be negative to cause D digits left of the decimal point of the value X to become zero.<br>
+返回数字X，截断到D小数位。 如果D为0，结果没有小数点或小数部分。 D是负数，导致值X的小数点左边的D数字变为零。</p>
+<p>2.如果TRUNCATE TABLE 则是<strong>删除表</strong>，在数据量比较大的情况下 效率比DELETE要高。</p>
+<blockquote>
+<p>1、DROP删表，表结构将删了，当然数据也不存在了<br>
+2、TRUNCATE和DELETE删数据，表结构还在<br>
+3、DELETE可以带条件删除，TRUNCATE是全部删除<br>
+4、DELETE删除会写日志，TRUNCATE不写<br>
+5、DELETE效率低，数据可以恢复，TRUNCATE效率高，数据不可恢复</p>
+</blockquote>
 
               </div>
               <div class="toc-container">
@@ -100,9 +124,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/pip-an-zhuang-mysqlclient-bao-cuo">
               <h3 class="post-title">
-                更新vim到8.1
+                pip 安装mysqlclient报错
               </h3>
             </a>
           </div>

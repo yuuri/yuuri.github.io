@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>DB2 数据库简单命令 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,21 +73,77 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              DB2 数据库简单命令
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-05-12
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>DB2 数据库和MySQL 数据库的命令还是有很大的不同，这里简单记录一下。</p>
+<!-- more --> 
+<pre><code>su db2inst1           （切换到db2inst1用户）
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2019/05/10/5cd4e4777d8d4.png" alt="1557454117006.png"></figure>
+<pre><code>. ~/sqllib/db2profile （调入该用户配置脚本，设置db2inst1实例为当前实例
+</code></pre>
+<pre><code>db2start              （启动当前实例）
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2019/05/10/5cd4e4777f703.png" alt="1557454367234.png"></figure>
+<p>如果我们希望一个实例在每次系统启动后自动启动，可以使用以下命令：</p>
+<pre><code>db2iauto -on &lt;实例名&gt;
+</code></pre>
+<p>如:希望实例db2inst1自动启动，命令为:</p>
+<pre><code>db2iauto -on db2inst1
+</code></pre>
+<p>如果希望关闭实例的自动启动，则可使用以下命令：</p>
+<pre><code>db2iauto -off &lt;实例名&gt;
+</code></pre>
+<pre><code>db2iauto -off db2inst1
+</code></pre>
+<p>创建样本数据库</p>
+<p>DB2 安装完成后默认是不会创建Sample数据库的，创建Sample数据库的命令为：</p>
+<pre><code>db2sampl
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2019/05/10/5cd4e4778c1ce.png" alt="1557454793649.png"></figure>
+<p>注意：创建Sample数据库前请确认当前实例名，避免将数据库创建到别的实例上，显示所有数据库实例的命令是</p>
+<pre><code>db2ilist
+</code></pre>
+<p>显示当前数据库实例的命令是</p>
+<pre><code>db2 get instance
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://i.loli.net/2019/05/10/5cd4e47781b56.png" alt="1557454570034.png"></figure>
+<p>如果需要将数据库创建到别的实例上，则参考前面实例启动/切换的内容先就行实例切换。</p>
+<p>操作命令</p>
+<p>1.查看当前所有的数据库</p>
+<pre><code>db2 list db directory  
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://i.loli.net/2019/05/10/5cd4ebd1324a4.png" alt="1557456816068.png"></figure>
+<p>2.连接到指定数据库</p>
+<pre><code>db2 connect  to (数据库名)
+db2 connect to sample
+</code></pre>
+<figure data-type="image" tabindex="6"><img src="https://i.loli.net/2019/05/10/5cd4ebd13c26b.png" alt="1557456914003.png"></figure>
+<p>3.查看当前所有的连接</p>
+<pre><code>db2 list application
+</code></pre>
+<figure data-type="image" tabindex="7"><img src="https://i.loli.net/2019/05/10/5cd4ebd13b6d1.png" alt="1557456990741.png"></figure>
+<p>4.查看数据库中的表</p>
+<pre><code>db2 list tables for all
+db2 list tables (查看所有非系统表)
+</code></pre>
+<figure data-type="image" tabindex="8"><img src="https://i.loli.net/2019/05/10/5cd4ebd1465c3.png" alt="1557457172679.png"></figure>
+<p>5.查看表结构</p>
+<pre><code>db2 description table (表名)
+</code></pre>
+<figure data-type="image" tabindex="9"><img src="https://i.loli.net/2019/05/10/5cd4ebd128a0e.png" alt="1557457357195.png"></figure>
 
               </div>
               <div class="toc-container">
@@ -100,9 +156,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/db2-shu-ju-ku-an-zhuang">
               <h3 class="post-title">
-                更新vim到8.1
+                DB2 数据库安装
               </h3>
             </a>
           </div>

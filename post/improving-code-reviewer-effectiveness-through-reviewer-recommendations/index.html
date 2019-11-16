@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>Improving Code Reviewer Effectiveness through Reviewer Recommendations | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,39 +73,70 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              Improving Code Reviewer Effectiveness through Reviewer Recommendations
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-09-24
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <hr>
+<p>[TOC]</p>
+<hr>
+<h4 id="abstract">Abstract</h4>
+<p>有效的代码评审能够提高代码质量和减少代码缺陷的产生。然而，这需要代码评审者对系统代码有经验和深刻的理解。手动指定代码评审者不仅代价高昂而且是一件费时的工作。为了，减少这样的成本，我们提出了reviewer recommendation algorithm采用file path similarity called FPS algorithms.使用3个OSS项目作为情景来进行学习。FPS algorithm的精确度提高到了77.97%，相比于先前的方式显著的提高了。</p>
+<h4 id="1introduction">1.Introduction</h4>
+<h4 id="2modern-peer-code-review">2.Modern Peer Code Review</h4>
+<h4 id="3reviewer-recommendation">3.Reviewer Recommendation</h4>
+<h4 id="4experiment">4.Experiment</h4>
+<h5 id="41">4.1</h5>
+<h5 id="42">4.2</h5>
+<h4 id="5conclusion-future-works">5.Conclusion &amp; Future Works</h4>
+<p>​	在这次研究中，我们提出的推荐算法使用相似路径(file path similarity)适用于同行代码审查(Peer Code Review).根据结果表明我们提出的算法在三个项目中有两个被有效的推荐了。这个算法也显著的提升相比于已经存在的算法在三个项目中。另外，我们的发现时间优先级令人惊讶的不适用于推荐算法在分布项目环境中。<br>
+​	我们未来的工作将专心于探索更多的项目进行深刻理解，尤其是改善本文算法适用于大规模项目的情况。<br>
+其他的评估方法也会考虑测量推荐算法的性能除了准确性的其他方面。与此同时，我们将考虑平衡<br>
+代码审核者的工作量的方法以帮助代码审核人员以及减少等待审阅的数量。</p>
 
               </div>
               <div class="toc-container">
-                
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#abstract">Abstract</a></li>
+<li><a href="#1introduction">1.Introduction</a></li>
+<li><a href="#2modern-peer-code-review">2.Modern Peer Code Review</a></li>
+<li><a href="#3reviewer-recommendation">3.Reviewer Recommendation</a></li>
+<li><a href="#4experiment">4.Experiment</a>
+<ul>
+<li><a href="#41">4.1</a></li>
+<li><a href="#42">4.2</a></li>
+</ul>
+</li>
+<li><a href="#5conclusion-future-works">5.Conclusion &amp; Future Works</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
               </div>
             </div>
           </article>
         </div>
 
-        
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
-              <h3 class="post-title">
-                更新vim到8.1
-              </h3>
-            </a>
-          </div>
         
 
         

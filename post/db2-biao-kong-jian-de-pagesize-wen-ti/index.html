@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>DB2表空间的pagesize问题 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,21 +73,52 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              DB2表空间的pagesize问题
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-05-13
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>今天在一个DB2环境中导入一批表结构，结果在中途报错退出</p>
+<pre><code class="language-shell">SQL0286N  A default table space could not be found with a page size of at 
+least &quot;16384&quot; that authorization ID &quot;DB2INST1&quot; is authorized to use. 
+</code></pre>
+<!-- more --> 
+<p>那么其实报错说的很清楚了，表空间的pagesize不够，而创建这张表至少需要16K的page。</p>
+<p>查看了一下当前database的表空间</p>
+<pre><code class="language-shell">db2 =&gt; select TBSPACE, OWNER, PAGESIZE from syscat.tablespaces
+
+TBSPACE                        OWNER                          PAGESIZE   
+------------------------------ ------------------------------ -----------
+SYSCATSPACE                    SYSIBM                                4096
+TEMPSPACE1                     SYSIBM                                4096
+USERSPACE1                     SYSIBM                                4096
+SYSTOOLSPACE                   DB2INST1                              4096
+SYSTOOLSTMPSPACE               DB2INST1                              4096
+</code></pre>
+<p>所有的表空间都是系统默认创建的，并且使用的pagesize也是默认的4K</p>
+<p>解决方式其实是很简单的，在这个database里新创建一个满足要求的表空间就够了，不过这里需要注意的是，buffer pool和表空间的pagesize大小需要对应。</p>
+<pre><code>#创建pagesize为32K的bufferpool
+db2 =&gt; create BUFFERPOOL bigbuffer SIZE 5000 PAGESIZE 32K
+DB20000I  The SQL command completed successfully.
+
+#创建pagesize为32K的tablespace，同时使用新创建的bufferpool
+db2 =&gt; CREATE TABLESPACE bigtablespace PAGESIZE 32K BUFFERPOOL bigbuffer
+DB20000I  The SQL command completed successfully.
+</code></pre>
+<p>#解决临时表空间不够的问题</p>
+<pre><code>CREATE BUFFERPOOL buf32 IMMEDIATE  SIZE 250 NUMBLOCKPAGES 108 BLOCKSIZE 32 PAGESIZE 32K
+
+CREATE SYSTEM TEMPORARY TABLESPACE pds_temp pagesize 32k bufferpool buf32
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -100,9 +131,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/db2-shu-ju-ku-jian-dan-ming-ling">
               <h3 class="post-title">
-                更新vim到8.1
+                DB2 数据库简单命令
               </h3>
             </a>
           </div>

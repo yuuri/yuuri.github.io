@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>linux 常用命令 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,21 +73,98 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              linux 常用命令
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-03-17
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <pre><code># 查找并批量移动文件
+find  /root/ -name &quot;*.png&quot; |xargs -i mv {} /root/ss/ 
+ll
+ls
+grep /grep -v
+less / y h g G V q
+cat
+more
+ps -aux | grep 
+netstat 
+pwd
+find
+xargs
+head
+tail
+wc -l / wc -w
+du
+df
+mv
+cp
+mkdir
+rmdir
+cd
+uname -a
+lsb_release -a
+chmod
+tail -f
+chown
+
+创建符号链接/硬链接:
+ln cc ccAgain :硬连接；删除一个，将仍能找到；
+ln -s cc ccTo :符号链接(软链接)；删除源，另一个无法使用；（后面一个ccTo 为新建的文件）
+
+消除重复行
+sort unsort.txt | uniq
+统计各行在文件中出现的次数
+sort unsort.txt | uniq -c
+找出重复行
+sort unsort.txt | uniq -d
+
+$wc -l file // 统计行数
+
+$wc -w file // 统计单词数
+
+$wc -c file // 统计字符数
+
+特殊变量： NR NF $0 $1 $2
+NR:表示记录数量，在执行过程中对应当前行号；
+
+NF:表示字段数量，在执行过程总对应当前行的字段数；
+
+$0:这个变量包含执行过程中当前行的文本内容；
+
+$1:第一个字段的文本内容；
+
+$2:第二个字段的文本内容
+
+显示进程信息，并实时更新
+top
+
+查看端口占用的进程状态：
+lsof -i:3306
+
+查看CPU使用率
+
+$sar -u
+
+使用watch 工具监控变化 当需要持续的监控应用的某个数据变化时，watch工具能满足要求； 执行watch命令后，会进入到一个界面，输出当前被监控的数据，一旦数据变化，便会高亮显示变化情况；
+
+eg：操作redis时，监控内存变化：
+
+$watch -d -n 1 './redis-cli info | grep memory'
+(以下为watch工具中的界面内容，一旦内存变化，即实时高亮显示变化）
+wget 
+scp
+pdb  -s n -l 
+
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -100,9 +177,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/ceph-rong-liang-xin-xi-bi-ji">
               <h3 class="post-title">
-                更新vim到8.1
+                Ceph 容量信息笔记
               </h3>
             </a>
           </div>

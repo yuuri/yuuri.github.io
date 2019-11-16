@@ -1,0 +1,481 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MySQL 语句2 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yuuri/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yuuri">
+  <img class="avatar" src="https://github.com/yuuri/images/avatar.png?v=1573876898580" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              MySQL 语句2
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-26
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>[TOC]</p>
+<h4 id="1通配符进行过滤like操作符">1.通配符进行过滤(LIKE操作符)</h4>
+<h5 id="11使用">1.1使用%</h5>
+<pre><code>SHOW VARIABLES WHERE Variable_name LIKE 'character_set%';
+</code></pre>
+<p>上面的SQL语句是查询MySQL字符集设置情况信息。结果如下：</p>
+<pre><code>mysql&gt; SHOW VARIABLES WHERE Variable_name LIKE 'character_set%';
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | utf8mb4                    |
+| character_set_connection | utf8mb4                    |
+| character_set_database   | utf8mb4                    |
+| character_set_filesystem | binary                     |
+| character_set_results    | utf8mb4                    |
+| character_set_server     | utf8mb4                    |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+8 rows in set (0.00 sec)
+</code></pre>
+<p>根据MySQL的配置，搜索时可以区分大小写的，如果设置区分大小写，查找字段为 ‘Character_set%’，将不会出现上面示例的结果。</p>
+<p>%可以在任意位置使用，也可以使用多个%</p>
+<p><strong>注意尾空格</strong>   如果某一个字段尾部含有空格  ‘%[某个字段]’ 将不会有匹配结果，解决方式时可以在最后也加上一个% 例如‘%[某个字段]%’，还有一种方法是使用函数去除尾部空格。</p>
+<p><strong>注意NULL</strong> 虽然%可以匹配任意字符，但是除了NULL，即使是‘%’ 也不能匹配NULL</p>
+<h5 id="12-使用_">1.2 使用_</h5>
+<p><em>和%效果一样，但是</em>_ 匹配的是单个字符。</p>
+<h4 id="2使用正则进行搜索">2.使用正则进行搜索</h4>
+<h5 id="21基本字符匹配">2.1基本字符匹配</h5>
+<pre><code>select project_name,id from git_project where project_name REGEXP 'd';
+</code></pre>
+<p>结果如下</p>
+<pre><code>mysql&gt; select project_name,id from git_project where project_name REGEXP 'd';
++----------------------------------------+----+
+| project_name                           | id |
++----------------------------------------+----+
+| torvalds/linux                         | 10 |
+| EbookFoundation/free-programming-books | 11 |
+| sindresorhus/awesome                   | 12 |
+| getify/You-Dont-Know-JS                | 13 |
+| kamranahmedse/developer-roadmap        | 16 |
+| d3/d3                                  | 17 |
+| microsoft/vscode                       | 18 |
+| tensorflow/models                      | 26 |
+| ytdl-org/youtube-dl                    | 27 |
+| mrdoob/three.js                        | 29 |
+| reduxjs/redux                          | 35 |
+| django/django                          | 40 |
+| lodash/lodash                          | 42 |
++----------------------------------------+----+
+13 rows in set (0.00 sec)
+
+</code></pre>
+<p><strong>LIKE 与REGEXP的区别</strong> LIKE匹配整个列，如果匹配的文本在列值中出现，LIKE将不会匹配。REGEXP 在列值中进行匹配，如果匹配的文本在列值中出现，将会进行匹配，并返回相应的值。</p>
+<p><strong>匹配不区分大小写</strong> MySQL的正则表达式匹配在版本3.2.3之后不区分大小写，即大写小写都匹配。如果你确实想要区分大小写可以使用BINARY关键字，如</p>
+<pre><code>select project_name,id where project_name REGEXP BINARY 'You'
+</code></pre>
+<p>例子如下</p>
+<pre><code>mysql&gt; select project_name,id from git_project where project_name REGEXP BINARY 'You';
++-------------------------+----+
+| project_name            | id |
++-------------------------+----+
+| getify/You-Dont-Know-JS | 13 |
++-------------------------+----+
+1 row in set (0.00 sec)
+
+mysql&gt; select project_name,id from git_project where project_name REGEXP  'You';
++-------------------------+----+
+| project_name            | id |
++-------------------------+----+
+| getify/You-Dont-Know-JS | 13 |
+| ytdl-org/youtube-dl     | 27 |
++-------------------------+----+
+2 rows in set (0.00 sec)
+</code></pre>
+<h5 id="22进行or匹配">2.2进行OR匹配</h5>
+<p>|为正则表达式中的OR 操作符，表示匹配其中之一。</p>
+<pre><code>mysql&gt; select project_name,id from git_project where project_name REGEXP  'djan|linux';
++----------------+----+
+| project_name   | id |
++----------------+----+
+| torvalds/linux | 10 |
+| django/django  | 40 |
++----------------+----+
+2 rows in set (0.00 sec)
+</code></pre>
+<h5 id="23-匹配几个字符之一">2.3 匹配几个字符之一</h5>
+<p>使用[]符号</p>
+<p>字符集合也可以被否定，即，它们将匹配除指定字符外的任何东西。<br>
+为否定一个字符集，在集合的开始处放置一个^即可。因此，尽管[123]<br>
+匹配字符1、2或3，但[^123]却匹配除这些字符外的任何东西</p>
+<h5 id="24匹配范围">2.4匹配范围</h5>
+<p>[0-9] 匹配所有数字,</p>
+<p>[a-z]匹配所有字母</p>
+<h5 id="25匹配特殊字符">2.5匹配特殊字符</h5>
+<p>匹配特殊字符需要使用转义符号 \</p>
+<pre><code>select project_name,id from git_project where REGEXP '\\.'
+</code></pre>
+<p>同时为了匹配 \本身 需要使用'\\'</p>
+<p>多数正则表达式实现使用单个反斜杠转义特殊字符，<br>
+以便能使用这些字符本身。但MySQL要求两个反斜杠（MySQL<br>
+自己解释一个，正则表达式库解释另一个）。</p>
+<p>具有特殊含义的元字符</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">\\f</td>
+<td>换页</td>
+</tr>
+<tr>
+<td style="text-align:left">\\n</td>
+<td>换行</td>
+</tr>
+<tr>
+<td style="text-align:left">\\r</td>
+<td>回车</td>
+</tr>
+<tr>
+<td style="text-align:left">\\t</td>
+<td>制表</td>
+</tr>
+<tr>
+<td style="text-align:left">\\v</td>
+<td>纵向制表</td>
+</tr>
+</tbody>
+</table>
+<h5 id="26-匹配字符类">2.6 匹配字符类</h5>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[:alnum:]</td>
+<td>任意字母和数字(0-9A-Za-z)</td>
+</tr>
+<tr>
+<td>[:alpha:]</td>
+<td>任意字符(a-zA-Z)</td>
+</tr>
+<tr>
+<td>[:blank:]</td>
+<td>空格和制表(\\t)</td>
+</tr>
+<tr>
+<td>[:cntrl:]</td>
+<td>ASCII控制字符(ASCII 0到31和127)</td>
+</tr>
+<tr>
+<td>[:digit:]</td>
+<td>任意数字(0-9)</td>
+</tr>
+<tr>
+<td>[:graph:]</td>
+<td>和[:print:]一样但不包括空格</td>
+</tr>
+<tr>
+<td>[:lower:]</td>
+<td>任意小写字母(a-z)</td>
+</tr>
+<tr>
+<td>[:print:]</td>
+<td>可打印任何字符</td>
+</tr>
+<tr>
+<td>[:punct:]</td>
+<td>既不在[:alnum:]又不在[:cntrl:]的字符</td>
+</tr>
+<tr>
+<td>[:space:]</td>
+<td>包括空格在内的任意空白字符(\\f,\\n,\\t,\\r,\\v)</td>
+</tr>
+<tr>
+<td>[:upper:]</td>
+<td>任意大写字母(A-Z)</td>
+</tr>
+<tr>
+<td>[:xdigit:]</td>
+<td>任意十六进制数字(a-fA-F0-9)</td>
+</tr>
+</tbody>
+</table>
+<p>使用例子：</p>
+<pre><code>select project_name,id,project_url from git_project where project_url REGEXP '[[:digit:]]';
+</code></pre>
+<pre><code>mysql&gt; select project_name,id,project_url from git_project where project_url REGEXP '[[:digit:]]';
++------------------+----+-----------------------------------------------+
+| project_name     | id | project_url                                   |
++------------------+----+-----------------------------------------------+
+| d3/d3            | 17 | https://api.github.com/repos/d3/d3            |
+| CyC2018/CS-Notes | 24 | https://api.github.com/repos/CyC2018/CS-Notes |
++------------------+----+-----------------------------------------------+
+2 rows in set (0.00 sec)
+</code></pre>
+<h5 id="27匹配多个实例">2.7匹配多个实例</h5>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>0个或多个</td>
+</tr>
+<tr>
+<td>+</td>
+<td>一个或多个</td>
+</tr>
+<tr>
+<td>？</td>
+<td>0个或1个</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>指定数量的匹配</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>不少于指定数目的匹配</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>匹配数目的范围(m不超过255)</td>
+</tr>
+</tbody>
+</table>
+<h5 id="28-定位符">2.8 定位符</h5>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>^</td>
+<td>文本的开始</td>
+</tr>
+<tr>
+<td>$</td>
+<td>文本的结尾</td>
+</tr>
+<tr>
+<td>[[:&lt;:]]</td>
+<td>词的开始</td>
+</tr>
+<tr>
+<td>[[:&gt;:]]</td>
+<td>词的结尾</td>
+</tr>
+</tbody>
+</table>
+<p><strong>^的双重用途</strong> ^有两种用法。在集合中（用[和]定义），用它<br>
+来否定该集合，否则，用来指串的开始处。</p>
+<p><strong>在REGEXP中使用和LIKE同样的效果</strong> LIKE和REGEXP的不同之处在于，LIKE匹配整个字符串而REGEXP匹配子串。利用定位符，通过用^开始每个表达式  $结束每个表达式，可以使REGEXP和LIKE一样</p>
+<p><strong>简单的正则表达式检测</strong> 可以在不使用数据库表的情况下来测试正则表达式，REGEXP总是返回0(没有匹配)或1(正确匹配) ，可以使用带文字的REGEXP来测试表达式，并试验他们，相应的语法如下：</p>
+<pre><code>mysql&gt; select 'hello' REGEXP '[[:digit:]]';
++------------------------------+
+| 'hello' REGEXP '[[:digit:]]' |
++------------------------------+
+|                            0 |
++------------------------------+
+1 row in set (0.00 sec)
+
+</code></pre>
+<pre><code>mysql&gt; select 'hello1' REGEXP '[[:digit:]]';
++-------------------------------+
+| 'hello1' REGEXP '[[:digit:]]' |
++-------------------------------+
+|                             1 |
++-------------------------------+
+1 row in set (0.00 sec)
+
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1%E9%80%9A%E9%85%8D%E7%AC%A6%E8%BF%9B%E8%A1%8C%E8%BF%87%E6%BB%A4like%E6%93%8D%E4%BD%9C%E7%AC%A6">1.通配符进行过滤(LIKE操作符)</a>
+<ul>
+<li><a href="#11%E4%BD%BF%E7%94%A8">1.1使用%</a></li>
+<li><a href="#12-%E4%BD%BF%E7%94%A8_">1.2 使用_</a></li>
+</ul>
+</li>
+<li><a href="#2%E4%BD%BF%E7%94%A8%E6%AD%A3%E5%88%99%E8%BF%9B%E8%A1%8C%E6%90%9C%E7%B4%A2">2.使用正则进行搜索</a>
+<ul>
+<li><a href="#21%E5%9F%BA%E6%9C%AC%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D">2.1基本字符匹配</a></li>
+<li><a href="#22%E8%BF%9B%E8%A1%8Cor%E5%8C%B9%E9%85%8D">2.2进行OR匹配</a></li>
+<li><a href="#23-%E5%8C%B9%E9%85%8D%E5%87%A0%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B9%8B%E4%B8%80">2.3 匹配几个字符之一</a></li>
+<li><a href="#24%E5%8C%B9%E9%85%8D%E8%8C%83%E5%9B%B4">2.4匹配范围</a></li>
+<li><a href="#25%E5%8C%B9%E9%85%8D%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6">2.5匹配特殊字符</a></li>
+<li><a href="#26-%E5%8C%B9%E9%85%8D%E5%AD%97%E7%AC%A6%E7%B1%BB">2.6 匹配字符类</a></li>
+<li><a href="#27%E5%8C%B9%E9%85%8D%E5%A4%9A%E4%B8%AA%E5%AE%9E%E4%BE%8B">2.7匹配多个实例</a></li>
+<li><a href="#28-%E5%AE%9A%E4%BD%8D%E7%AC%A6">2.8 定位符</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yuuri/post/zhi-zhen">
+              <h3 class="post-title">
+                指针
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yuuri/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

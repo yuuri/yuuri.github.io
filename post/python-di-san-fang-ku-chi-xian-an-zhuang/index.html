@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>Python第三方库离线安装 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,11 +73,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              Python第三方库离线安装
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-05-14
               </span>
               <span>
                 1 min read
@@ -87,7 +87,18 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>Python第三方库安装起来很简单，但是有的时候如果环境没有网络的话，处理起来还是很麻烦的。这里简单记录一下。</p>
+<!-- more -->
+<p>1.导出环境依赖</p>
+<pre><code>pip freeze &gt; requirements.txt
+</code></pre>
+<p>2.根据依赖下载离线安装包</p>
+<pre><code>pip download -r requirements.txt -d packages
+</code></pre>
+<p>3.将 <strong>requirements.txt</strong> 和 <strong>packages</strong> 压缩一下，这里实例压缩成了 zip，将 zip 包一层层的发送到远程开发机中</p>
+<p>4.安装离线包</p>
+<pre><code>pip install --no-index --find-links=pakages -r requirements.txt
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -100,9 +111,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/db2-biao-kong-jian-de-pagesize-wen-ti">
               <h3 class="post-title">
-                更新vim到8.1
+                DB2表空间的pagesize问题
               </h3>
             </a>
           </div>

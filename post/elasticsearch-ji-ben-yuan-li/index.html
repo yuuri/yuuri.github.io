@@ -1,0 +1,289 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Elasticsearch 基本原理 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yuuri/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yuuri">
+  <img class="avatar" src="https://github.com/yuuri/images/avatar.png?v=1573876898580" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Elasticsearch 基本原理
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-12
+              </span>
+              <span>
+                8 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h5 id="elasticsearch-特点">Elasticsearch 特点</h5>
+<p>可以作为一个大型分布式集群（数百台服务器）技术,处理PB级数据,服务大公司;也可以运行在单机上,服务小公司。</p>
+<p>Apache Lucene是一个用Java编写的高性能，功能齐全信息检索库。Elasticsearch内部利用Lucene来构建的分布式和分析功能。提供了 REST API 的操作接口，开箱即用。</p>
+<p>Elasticsearch在后台使用Lucene来提供最强大的全文检索，提供任何开源产品的能力。搜索自带的多语言支持，强大的查询语言，地理位置支持，上下文感知的建议，自动完成和搜索片段。</p>
+<p>Elasticsearch允许你快速上手。简单的指定一个JSON文档将自动检测数据的结构和类型，创建一个索引，并使你的数据检索。还拥有完全控制，以自定义数据是如何被索引。</p>
+<h5 id="一基本概念">一.基本概念</h5>
+<h6 id="11-node">1.1 Node</h6>
+<p>Elastic是一个分布式数据库，可以运行在多个节点上，多个节点可以组成一个集群。</p>
+<h6 id="12-index">1.2 Index</h6>
+<p>Elastic 会索引所有字段，经过处理后写入反向索引（Inverted Index），当查找时会直接查找这个索引。</p>
+<p>索引，Elastic数据管理的顶层就是Index(索引)，它是单个数据库的同义词。每个Index的名称必须是小写。</p>
+<h6 id="13-document">1.3 Document</h6>
+<p>Index 里面单条的记录成为Document(文档)，许多个Document 构成了一个Index</p>
+<p>Document  使用JSON格式表示。同一个Index中的Document不要求使用相同的结构（Schema）,但是最好使用相同的，这样有利于提高查询效率。</p>
+<h6 id="14-type">1.4 Type</h6>
+<p>用于将Document分组，但是不同的Type 需要有相同的数据结构，如果有不同的数据结构，应该存在不同的Index中。由于Type可以分组但是却要求有相同的数据结构，这样不利于查询的效率。</p>
+<p><em>在6.X版中一个Index只可以有一个Type,在7.X版本中可以不指定Type.</em></p>
+<h6 id="15-shard">1.5 Shard</h6>
+<p>每个Index上包含多个Shard,默认是5个，分散在不同节点上，不会存在两个相同的Shard存在同一个Node上。Shard是最小的Lucene索引单元。</p>
+<p>当Document 存储时Elastic会通过doc id进行hash来确定存储到哪一个Shard上，然后再Shard上面进行索引存储。</p>
+<h6 id="16-segments">1.6 Segments</h6>
+<p>一个Index由许多独立的Segments 组成，而 Segments 则包含了文档中的Term Dictionary ,Term Index的倒排索引以及Document的字段数据。</p>
+<p>Segments 直接提供了搜索功能，ES的一个Shard(Lucence Index)中是由大量的Segments构成的，且每一次fresh 都会产生新的Segments文件。但是这样产生的Segments会有大有小，相当碎片化。因此在ES内部会开启一个线程，将小的Segments 合并(Merge)为一个大的Segments,减少碎片化，降低文件打开数，提升IO性能。</p>
+<h5 id="二elastic索引深入探究">二.Elastic索引深入探究</h5>
+<p>Elasticsearch索引的精髓是</p>
+<blockquote>
+<p>一切设计都是为了提高搜索的性能</p>
+</blockquote>
+<p>在插入数据的同时，会为每一个字段建立索引——倒排索引。</p>
+<p>有如下要存的数据</p>
+<blockquote>
+<ol>
+<li>The quick brown fox jumped over the lazy dog</li>
+<li>Quick brown foxes leap over lazy dogs in summer</li>
+</ol>
+</blockquote>
+<p>为了建立倒排索引首先将每个文档的Content分成一个个单独的词（可以称之为词条或者是Tokens）创建一个不重复的词条的排序列表。</p>
+<p>得到如下的结构</p>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2019/04/30/5cc7bd700017e.png" alt=""></figure>
+<p>假设doc1的id为1，doc2的id为2，这个ID是Elasticsearch自建的文档ID,那么经过倒排索引之后我们得到如下的对应关系</p>
+<blockquote>
+<p><strong>Term</strong> <strong>Posting List</strong></p>
+<p>The 【1】</p>
+<p>quick 【1,2】</p>
+<p>brown 【1,2】</p>
+<p>fox 【1】</p>
+<p>...... ......</p>
+</blockquote>
+<p>Elasticsearch为了能快速查找到某一个term，将所有的term排个序，然后使用二分法查找term,logN的查找效率，就像通过字典查找一样，这就是<strong>Term  Dictionary</strong></p>
+<p><strong>Term Index</strong></p>
+<p>如果数据量大的话使用<strong>Term Dictionary</strong>依然会开销过大，放内存中不现实，因此有了Term Index，就像字典里面的索引一样。比如存储A开头的有哪些term 存在哪一页等。可以将Term Index看作是一棵树。</p>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2019/04/30/5cc7bd700eb65.png" alt=""></figure>
+<p>这棵树不会包含所有的term,包含的是term的一些前缀。通过Term  Index可以快速的定位到Term Dictionary的某个offset，然后从这个位置继续进行查找。</p>
+<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2019/04/30/5cc7bd7021672.png" alt=""></figure>
+<p>因此Term Index不需要存储所有的Term,存储的是Term 的前缀与Term Dictionary的Block之间的关系，再结合FST的压缩技术可以将Term Index 缓存到内存中。</p>
+<p>从Term Index查到对应的Term Dictionary的Block位置之后，再去磁盘上找Term，大大减少了磁盘随机读的次数。</p>
+<h5 id="三elastic-存储过程">三.Elastic 存储过程</h5>
+<figure data-type="image" tabindex="4"><img src="https://i.loli.net/2019/04/30/5cc7bd700b6b4.jpeg" alt=""></figure>
+<h6 id="31-索引创建">3.1 索引创建</h6>
+<p>1.新Document首先写入内存Buffer缓存中，</p>
+<p>2.每隔一段时间，执行Commit Point操作 Buffer写入新Segment中</p>
+<p>3.新Segment写入文件系统缓存Filesystem Cache中</p>
+<p>4.文件系统缓存中的Index Segment 被Fsync强制刷到磁盘上，确保物理写入。此时新Segment被打开供Search操作。</p>
+<p>5.清空内存Buffer,可以接收新的文档。</p>
+<p>6.以上是传统的写入步骤，实际上Elasticsearh为保证实时性，会进行Refresh操作。</p>
+<p>7.在新的文档写入后，写入Index buffer的同时会写入Translog</p>
+<p>8.Refresh操作使得写入文档搜索可见</p>
+<p>9.Flush操作使得Filesystem Cache 写入磁盘，以达到持久化的目的。</p>
+<h6 id="32-索引更新删除">3.2 索引更新/删除</h6>
+<p>删除和更新也是写操作，但是在Elasticsearch中Document是不可变的。因此不能直接进行更新和删除。</p>
+<p>1.在每个segment中存在一个.del文件，这个文件记录的segment的删除状态。当发送删除请求时，并未被实际删除，而是在.del中记录状态为删除。此文档仍然可以被搜索到，但是在结果中会被过滤掉。</p>
+<p>2.创建新文档的时候会为文档分配一个版本号。文档每次更新都能产生一个新的版本号。当执行更新操作时，旧版本会在.del文件中标记删除，并且新版本在新的Segments中编入索引。旧版本仍然能被查询匹配，但是会在结果中被过滤掉。</p>
+<p><em>当执行归并（Merge）的时候，老的 segment 文件将会被删除，合并成新的 segment 文件，这个时候也就是物理删除了。</em></p>
+<h5 id="四elastic-读取过程">四.Elastic 读取过程</h5>
+<figure data-type="image" tabindex="5"><img src="https://i.loli.net/2019/04/30/5cc7bd700f2c6.jpeg" alt=""></figure>
+<h6 id="41-查询query-phase阶段">4.1 查询（Query Phase）阶段</h6>
+<p>1.在这个阶段首先协调节点将搜索请求路由到Index下的所有Shard(包括主要和副本)。</p>
+<p>2.各个Shard独立执行搜索，根据相关性分数创建一个优先级排序结果。</p>
+<p>3.各个Shard将匹配的Document和Document相关性分数ID返回给协调节点。</p>
+<p>4.协调节点创建一个新的优先级队列，对全局结果进行排序。</p>
+<p>5.查询可以由许多个结果，但是默认每个Shard会获取前10个结果，发送给协调节点，协调节点则返回全局的前10个结果。</p>
+<h6 id="42-获取fetch-phase阶段">4.2 获取（Fetch Phase）阶段</h6>
+<p>在协调节点对所有结果进行排序，生成全局排序的列表之后，他将会向各个分片请求原始文档。各个分片则会将文档补充完整后返回给协调节点。</p>
+<h5 id="五elastic-搜索相关性">五.Elastic 搜索相关性</h5>
+<p><em>The relevance is determined by a score that Elasticsearch gives to each document returned in the search result. The default algorithm used for scoring is tf/idf (term frequency/inverse document frequency). The term frequency measures how many times a term appears in a document (higher frequency == higher relevance) and inverse document frequency measures how often the term appears in the entire index as a percentage of the total number of documents in the index (higher frequency == less relevance). The final score is a combination of the tf-idf score with other factors like term proximity (for phrase queries), term similarity (for fuzzy queries), etc.</em></p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#elasticsearch-%E7%89%B9%E7%82%B9">Elasticsearch 特点</a></li>
+<li><a href="#%E4%B8%80%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">一.基本概念</a>
+<ul>
+<li><a href="#11-node">1.1 Node</a></li>
+<li><a href="#12-index">1.2 Index</a></li>
+<li><a href="#13-document">1.3 Document</a></li>
+<li><a href="#14-type">1.4 Type</a></li>
+<li><a href="#15-shard">1.5 Shard</a></li>
+<li><a href="#16-segments">1.6 Segments</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8Celastic%E7%B4%A2%E5%BC%95%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%A9%B6">二.Elastic索引深入探究</a></li>
+<li><a href="#%E4%B8%89elastic-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B">三.Elastic 存储过程</a>
+<ul>
+<li><a href="#31-%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA">3.1 索引创建</a></li>
+<li><a href="#32-%E7%B4%A2%E5%BC%95%E6%9B%B4%E6%96%B0%E5%88%A0%E9%99%A4">3.2 索引更新/删除</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9Belastic-%E8%AF%BB%E5%8F%96%E8%BF%87%E7%A8%8B">四.Elastic 读取过程</a>
+<ul>
+<li><a href="#41-%E6%9F%A5%E8%AF%A2query-phase%E9%98%B6%E6%AE%B5">4.1 查询（Query Phase）阶段</a></li>
+<li><a href="#42-%E8%8E%B7%E5%8F%96fetch-phase%E9%98%B6%E6%AE%B5">4.2 获取（Fetch Phase）阶段</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94elastic-%E6%90%9C%E7%B4%A2%E7%9B%B8%E5%85%B3%E6%80%A7">五.Elastic 搜索相关性</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yuuri/post/share-pic">
+              <h3 class="post-title">
+                Share Pic
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yuuri/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

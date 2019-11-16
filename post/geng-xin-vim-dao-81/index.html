@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>更新vim到8.1 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,21 +73,73 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              更新vim到8.1
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-01-06
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>简单记录了一下在Centos 7.5下升级到Vim 8.1 的基本步骤</p>
+<!-- more --> 
+<pre><code class="language-shell">yum install gcc-c++ ncurses-devel python-devel
+</code></pre>
+<pre><code>git clone https://github.com/vim/vim.git
+</code></pre>
+<pre><code>cd vim/src
+</code></pre>
+<pre><code>./configure \
+  --disable-nls \
+  --enable-cscope \
+  --enable-gui=no \
+  --enable-multibyte  \
+  --enable-pythoninterp \
+  --enable-python3interp \
+  --enable-rubyinterp \
+  --with-features=huge  \
+  --with-python-config-dir=/usr/lib/python2.7/config \
+  --with-python-config-dir=/usr/lib/python3.6/config \
+  --with-tlib=ncurses \
+  --without-x \
+  --prefix=/usr/lib/vim
+</code></pre>
+<p>#编译安装要养成--prefix的好习惯，方便删除软件 这样删除的时候只要删除对应的文件夹即可。</p>
+<p>安装的时候指定--prefix安装目录，另外安装的时候请使用<br>
+<strong>make &gt;&amp; LOG_make &amp;</strong><br>
+<strong>make install &gt;&amp; LOG_install &amp;</strong><br>
+用于保存安装信息日志，这样需要卸载的时候方便查看哪些文件安装在了系统目录中，例如/usr/lib下的库文件。</p>
+<pre><code>make &gt; &amp;&amp; make install
+</code></pre>
+<pre><code>cp src/vim /usr/bin
+vim --version
+</code></pre>
+<p>Centos 安装python3</p>
+<pre><code>yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+</code></pre>
+<pre><code>➜  yum makecache
+➜  yum install python36u
+➜  yum -y install python36u-pip
+➜  yum -y install python36u-devel
+</code></pre>
+<p>或者执行脚本命令</p>
+<pre><code>#!/bin/bash
+yum -y install wget gcc make  zlib-devel readline-devel  bzip2-devel ncurses-devel sqlite-devel gdbm-devel xz-devel tk-devel openssl-devel
+wget https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tar.xz
+xz -d Python-3.6.1.tar.xz
+tar -xvf Python-3.6.1.tar
+cd Python-3.6.1
+./configure --prefix=/usr/local/python3.6 --enable-optimizations
+make
+make install
+ln -s /usr/local/python3.6/bin/python3 /usr/bin/python3
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -100,9 +152,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/hello-gridea">
               <h3 class="post-title">
-                更新vim到8.1
+                Hello Gridea
               </h3>
             </a>
           </div>

@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title> SQL 语句 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,11 +73,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+               SQL 语句
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-09-05
               </span>
               <span>
                 1 min read
@@ -87,7 +87,17 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <pre><code>select sum(v_p.price) from student s where s.grade_id =7  join vip_list v_l on s.id =  v_1.student_id join vip_price v_p on v_l.name = v_p.name 
+</code></pre>
+<p>where语句最后才进行判断，会把所有的条件都查出来最后才筛选，性能不好</p>
+<p>使用子查询可以先筛选再进行多表联查</p>
+<pre><code>select sum(vip_price.price) from vip_price where vip_price.name IN
+(select vip_list.name from vip_list where vip_list.student_id IN
+(select student.id from student where student.grade_id='7'))
+</code></pre>
+<p>或者可以这样</p>
+<pre><code>select sum(v_p.price) from v_list v join student s on s.id = v.student_id and s.grade_id = 7 join v_price v_p on v.name = v_p.name
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -100,9 +110,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/yi-tiao-nginx-ming-ling-de-si-kao">
               <h3 class="post-title">
-                更新vim到8.1
+                一条nginx命令的思考
               </h3>
             </a>
           </div>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://github.com/yuuri</id>
     <title>Gridea</title>
-    <updated>2019-11-12T14:02:06.765Z</updated>
+    <updated>2019-11-16T04:02:11.557Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://github.com/yuuri"/>
     <link rel="self" href="https://github.com/yuuri/atom.xml"/>
@@ -11,35 +11,1143 @@
     <icon>https://github.com/yuuri/favicon.ico</icon>
     <rights>All rights reserved 2019, Gridea</rights>
     <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://github.com/yuuri/post/hello-gridea</id>
-        <link href="https://github.com/yuuri/post/hello-gridea">
+        <title type="html"><![CDATA[MySQL语句 4]]></title>
+        <id>https://github.com/yuuri/post/emk_dIzV-</id>
+        <link href="https://github.com/yuuri/post/emk_dIzV-">
         </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+        <updated>2019-09-27T08:39:10.000Z</updated>
+        <content type="html"><![CDATA[<p>[TOC]</p>
+<h5 id="1使用子查询">1.使用子查询</h5>
+<p><strong>列必须匹配</strong>   在WHERE子句中使用子查询，应该保证SELECT 语句和WHERE子句中相同数目的列。通常子查询将返回单个列并且与单个列进行匹配，但如果需要也可以使用多个列。</p>
+<p><strong>相关子查询</strong> 涉及到外部查询的子查询称为相关子查询。任何时候，只要列名可能含有多义性，那么我们就必须使用这种语法(表明和列名由一个点号分割)。如果不限定表名，MySQL会总是优先与当前表中的列进行匹配。</p>
+<p><strong>逐渐增加子查询</strong>  使用子查询测试和调试查询需要有一定的技巧性，特别是在语句的复杂度不断增加的情况下。用子查询建立(和测试)查询最可靠的方法是逐渐进行，这与MySQL内部处理它们的方法非常相同。首先，建立和测试最内层的查询。然后，用硬编码数据建立和测试外层查询，并且仅在确认它正常后才嵌入子查询。这时，再次测试它。对于要增加的每个查询，重复这些步骤。这样进给构造查询增加了一点点时间，但节省了以后(找出查询为什么不正常)的大量时间，并且极大的提高了查询一开始就正常工作的可能性。</p>
+<h5 id="2联结表join">2.联结表(join)</h5>
+<p>​	SQL最强大的功能之一就是能在数据检索查询的执行中联结(join)表。联结是利用SQL的SELECT能执行的最重要的操作</p>
+<p><strong>外键</strong> 外键为某个表中的一列，它包含另一个表的主键值，定义了两个表之间的关系。</p>
+<p><strong>可伸缩性(scale)</strong> 能够适应不断增加的工作量而不失败。设计良好的数据库或应用程序称之为可伸缩性好(scale well)</p>
+<p>使用join的好处：</p>
+<p><strong>维护引用完整性</strong> 重要的是，要理解联结不是物理实体。换句话说，它在实际的数据库表中不存在。联结由MySQL根据需要建立，它存在于查询的执行当中。</p>
+<p>在使用关系表时，仅在关系列中插入合法的数据非常重要。回到这里的例子，如果在products表中插入拥有非法供应商ID（即没有在vendors表中出现）的供应商生产的产品，则这些产品是不可访问的，因为它们没有关联到某个供应商。</p>
+<p>为防止这种情况发生，可指示MySQL只允许在products表的供应商ID列中出现合法值（即出现在vendors表中的供应商）。这就是维护引用完整性，它是通过在表的定义中指定主键和外键来实现的。</p>
+<p><strong>完全限定列名</strong> 在引用的列可能出现二义性时，必须使用完全限定列名（用一个点分隔的表名和列名）。如果引用一个没有用表名限制的具有二义性的列名，MySQL将返回错误。</p>
+<p><strong>笛卡儿积（cartesian product）</strong> 由没有联结条件的表关系返回的结果为笛卡儿积。检索出的行的数目将是第一个表中的行数乘以第二个表中的行数。</p>
+<p><strong>性能考虑</strong> MySQL在运行时关联指定的每个表以处理联结。这种处理可能是非常耗费资源的，因此应该仔细，不要联结不必要的表。联结的表越多，性能下降越厉害。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MySQL语句 3	]]></title>
+        <id>https://github.com/yuuri/post/mysql-yu-ju-3</id>
+        <link href="https://github.com/yuuri/post/mysql-yu-ju-3">
+        </link>
+        <updated>2019-09-26T07:03:16.000Z</updated>
+        <content type="html"><![CDATA[<p>[TOC]</p>
+<h4 id="1创建计算字段">1.创建计算字段</h4>
+<p>​	与之前的用法不同，计算字段实际上并不存在于数据库中。计算字段是在SELECT语句中创建的。</p>
+<p>​	要注意到，只有数据库自己知道哪些列是实际存在的，哪些列是计算字段。从客户机(应用程序)的角度，计算字段的数据是以与其他字段相同的方式进行返回的。</p>
+<h5 id="1拼接字段">1.拼接字段</h5>
+<p>​	拼接(Concatenate)将值链结到一起构成单个值</p>
+<p>​	在MySQL的SELECT 语句中，可以使用concat()函数来拼接两个列。</p>
+<p>​	<strong>MySQL的不同之处</strong> 其他常见的数据库使用 + 或 ||来实现拼接，MySQL使用concat()函数来实现。</p>
+<pre><code>mysql&gt; select concat(id,'-',project_name) from git_project limit 3;
++-----------------------------+
+| concat(id,'-',project_name) |
++-----------------------------+
+| 1-robbyrussell/oh-my-zsh    |
+| 3-facebook/react            |
+| 5-tensorflow/tensorflow     |
++-----------------------------+
+3 rows in set (0.00 sec)
+</code></pre>
+<p><strong>删除多余空格</strong>  在MySQL中删除右侧多余的空格可以使用RTrim()函数来实现。</p>
+<p><strong>Trim函数</strong> 除了使用RTrim()函数之外，还可以使用LTrim()，与RTrim()函数相似的，LTrim()函数表示去除左边多余的空格。Trim()函数则是去除串两边的空格。‘</p>
+<h5 id="2使用别名">2.使用别名</h5>
+<p>​	SQL支持列别名，别名(alias)是一个是一个字段或一个值的替换名，别名用关键字AS 赋予。</p>
+<p><strong>别名的用途</strong> 别名的用途包括在实际的表列名包含不符合规定的名字时重新命名，以及实际的名字意义不明时扩充它。</p>
+<h5 id="3执行算术计算">3.执行算术计算</h5>
+<p>​	MySQL支持 + - * / 来进行算术操作，圆括号可以用来进行优先级的区分。</p>
+<p><strong>如何测试计算</strong>  算术计算同样可以使用SELECT 来进行测试。虽然SELECT 通常用来从表中检索数据，但可以使用省略FROM子句以便简单的访问和处理表达式。例如SELECT 3*2 将返回6 ，SELECT NOW()将会返回当前时间。</p>
+<h4 id="2使用数据处理函数">2.使用数据处理函数</h4>
+<h5 id="1函数">1.函数</h5>
+<p>与其他计算机语言一样，SQL同样支持利用函数来进行数据处理。函数一般是在数据上执行，给数据的处理和转换带来了方便。</p>
+<p><strong>函数没有SQL可移植性强</strong>   能运行在多个系统上，称之为可移植性，相对来说，大部分SQL时可移植的，在SQL之间存在差异时，处理起来也不是特别难，但是函数大部分时不可移植的。几乎每种DMBS都有一些其他不支持的函数。而且有时候差异很大。</p>
+<h5 id=""></h5>
+<h5 id="2文本处理函数">2.文本处理函数</h5>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Left(str,length)</td>
+<td>返回串左边的字符</td>
+</tr>
+<tr>
+<td>Length()</td>
+<td>返回串的长度</td>
+</tr>
+<tr>
+<td>Locate()</td>
+<td>找回串的一个子串</td>
+</tr>
+<tr>
+<td>Lower()</td>
+<td>将串转为小写</td>
+</tr>
+<tr>
+<td>LTrim()</td>
+<td>去掉串左边的空格</td>
+</tr>
+<tr>
+<td>Right()</td>
+<td>返回串右边的字符</td>
+</tr>
+<tr>
+<td>RTim()</td>
+<td>去掉串右边的空格</td>
+</tr>
+<tr>
+<td>Soundex()</td>
+<td>返回串的soundex值</td>
+</tr>
+<tr>
+<td>Substring()</td>
+<td>返回子串的字符</td>
+</tr>
+<tr>
+<td>Upper()</td>
+<td>将串转换为大写</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-sql">mysql&gt; select Left('Paul N. Liker',3);
++-------------------------+
+| Left('Paul N. Liker',3) |
++-------------------------+
+| Pau                     |
++-------------------------+
+1 row in set (0.00 sec)
+
+</code></pre>
+<pre><code>mysql&gt; select Length('Paul N. Liker');
++-------------------------+
+| Length('Paul N. Liker') |
++-------------------------+
+|                      13 |
++-------------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<pre><code>mysql&gt; select Locate('a','Paul N. Liker');
++-----------------------------+
+| Locate('a','Paul N. Liker') |
++-----------------------------+
+|                           2 |
++-----------------------------+
+1 row in set (0.00 sec)
+
+</code></pre>
+<pre><code>mysql&gt; SELECT SUBSTRING('Quadratically',5);
+        -&gt; 'ratically'
+mysql&gt; SELECT SUBSTRING('foobarbar' FROM 4);
+        -&gt; 'barbar'
+mysql&gt; SELECT SUBSTRING('Quadratically',5,6);
+        -&gt; 'ratica'
+mysql&gt; SELECT SUBSTRING('Sakila', -3);
+        -&gt; 'ila'
+mysql&gt; SELECT SUBSTRING('Sakila', -5, 3);
+        -&gt; 'aki'
+mysql&gt; SELECT SUBSTRING('Sakila' FROM -4 FOR 2);
+        -&gt; 'ki'
+</code></pre>
+<p><strong>Soundex函数</strong>    SOUNDEX是将一个将任何文本串转为描述其语音表示的字母数字模式的算法。SOUNDEX考虑了类似的发音字符和音节，使得能对串进行发音比较而不是字母比较。虽然SOUNDEX不是SQL概念，但是MySQL(大多数的DBMS)都提供对SOUNDEX的支持。</p>
+<p>下面给出一个使用Soundex的例子。</p>
+<pre><code>mysql&gt; select Soundex('Paul N. Baker');
++--------------------------+
+| Soundex('Paul N. Baker') |
++--------------------------+
+| P45126                   |
++--------------------------+
+1 row in set (0.01 sec)
+
+mysql&gt; select Soundex('Paul N. Lie');
++------------------------+
+| Soundex('Paul N. Lie') |
++------------------------+
+| P454                   |
++------------------------+
+1 row in set (0.04 sec)
+
+mysql&gt; select Soundex('Paul N. Liker');
++--------------------------+
+| Soundex('Paul N. Liker') |
++--------------------------+
+| P45426                   |
++--------------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<h5 id="3日期处理函数">3.日期处理函数</h5>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AddDate()</td>
+<td>增加一个日期(天,周)</td>
+</tr>
+<tr>
+<td>AddTime()</td>
+<td>增加一个日期(时,分)</td>
+</tr>
+<tr>
+<td>CurDate()</td>
+<td>返回当前日期</td>
+</tr>
+<tr>
+<td>CurTime()</td>
+<td>返回当前时间</td>
+</tr>
+<tr>
+<td>Date()</td>
+<td>返回日期时间的日期部分</td>
+</tr>
+<tr>
+<td>DateDiff()</td>
+<td>计算两个日期之间的差值</td>
+</tr>
+<tr>
+<td>Date_add()</td>
+<td>高度灵活的日期运算函数</td>
+</tr>
+<tr>
+<td>Date_Format()</td>
+<td>返回一个格式化的日期或时间串</td>
+</tr>
+<tr>
+<td>Day()</td>
+<td>返回一个日期的天数部分</td>
+</tr>
+<tr>
+<td>DayOfWeek()</td>
+<td>对于一个日期，返回对应的星期几</td>
+</tr>
+<tr>
+<td>Hour()</td>
+<td>返回一个时间的小时部分</td>
+</tr>
+<tr>
+<td>Minute()</td>
+<td>返回一个时间的分钟部分</td>
+</tr>
+<tr>
+<td>Month()</td>
+<td>返回一个日期的月份部分</td>
+</tr>
+<tr>
+<td>Now()</td>
+<td>返回当前日期和时间</td>
+</tr>
+<tr>
+<td>Second()</td>
+<td>返回一个时间的秒部分</td>
+</tr>
+<tr>
+<td>Time()</td>
+<td>返回一个日期时间的时间部分</td>
+</tr>
+<tr>
+<td>Year()</td>
+<td>返回一个日期的年份部分</td>
+</tr>
+</tbody>
+</table>
+<p><strong>如果要的是日期，请使用Date()</strong>   如果你想要的仅是日期，则使用Date()是一个良好的习惯，即使你知道相应的列只包含日期也是如此。这样，如果由于某种原因表中以后有日期和时间值，你的SQL代码也不用改变。当然，也存在一个Time()函数，在你只想要时间时应该使用它</p>
+<h5 id="-2"></h5>
+<h5 id="4数值处理函数">4.数值处理函数</h5>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abs()</td>
+<td>返回一个数的绝对值</td>
+</tr>
+<tr>
+<td>Cos()</td>
+<td>返回一个角度的余弦</td>
+</tr>
+<tr>
+<td>Exp()</td>
+<td>返回一个数的指数值</td>
+</tr>
+<tr>
+<td>Mod()</td>
+<td>返回一个除操作的余</td>
+</tr>
+<tr>
+<td>Pi()</td>
+<td>返回圆周率</td>
+</tr>
+<tr>
+<td>Rand()</td>
+<td>返回一个随机数</td>
+</tr>
+<tr>
+<td>Sin()</td>
+<td>返回一个角度的正弦</td>
+</tr>
+<tr>
+<td>Sqrt()</td>
+<td>返回一个数的平方根</td>
+</tr>
+<tr>
+<td>Tan()</td>
+<td>返回一个角度的正切</td>
+</tr>
+</tbody>
+</table>
+<h5 id="5聚集函数">5.聚集函数</h5>
+<p><strong>聚集函数</strong> 运行在行组上，计算和返回单个值的函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AVG()</td>
+<td>返回某列的平均值</td>
+</tr>
+<tr>
+<td>COUNT()</td>
+<td>返回某列的行数</td>
+</tr>
+<tr>
+<td>MAX()</td>
+<td>返回某列的最大值</td>
+</tr>
+<tr>
+<td>MIN()</td>
+<td>返回某列的最小值</td>
+</tr>
+<tr>
+<td>SUM()</td>
+<td>返回某列值之和</td>
+</tr>
+</tbody>
+</table>
+<h6 id="avg函数">AVG()函数</h6>
+<p><strong>只能用于单个列</strong>  AVG()只能用来确定特定数列值的平均值，而且列明必须作为函数参数给出。为了获得多个列的值，必须使用多个AVG()函数</p>
+<p><strong>NULL值</strong> AVG()函数忽略值为NULL 的行</p>
+<h6 id="count函数">COUNT()函数</h6>
+<p>COUNT()函数有两种使用方法：</p>
+<p>1.COUNT(*) 对表中行的数量进行计算，不管列中包含空值（NULL）还是不包含空值。</p>
+<p>2.COUNT(column) 对特定列中具有值的函数进行计数，忽略NULL值</p>
+<h6 id="maxmin函数">MAX,MIN函数</h6>
+<p>MAX,MIN函数返回最大值。</p>
+<p><strong>非数值数据使用MAX,MIN函数</strong> 如果对非数值类型数据类型使用MAX MIN函数。MAX()返回最后一行，MIN()返回第一行。MAX,MIN函数均忽略NULL值。</p>
+<h6 id="sum函数">SUM()函数</h6>
+<p>SUM()函数返回只当列和的总计。</p>
+<p><strong>多个列进行计算</strong>  利用标准算术符号，所有聚集函数都可以用来执行多个列上的计算。</p>
+<h5 id="6聚集不同值">6.聚集不同值</h5>
+<p>ALL为默认，如果想要使用不用的值，可以使用DISTINCT关键字。</p>
+<p><strong>注意</strong>   如果指定列名，则DISTINCT只能用于COUNT()。DISTINCT不能用于COUNT(*)，因此不允许使用COUNT（DISTINCT），否则会产生错误。类似地，DISTINCT必须使用列名，不能用于计算或表达式。</p>
+<h5 id="7分组数据">7.分组数据</h5>
+<h6 id="使用group-by-进行分组">使用GROUP BY 进行分组</h6>
+<p>使用GROUP BY 有下面一些规定：</p>
+<p>1.GROUP BY 子句可以包含任意数目的列。这使得能对分组进行嵌套，为数据分组提供更细粒度的控制。</p>
+<p>2.如果在GROUP BY子句嵌套了子句，数据将在最后规定的分组进行汇总。换句话说，建立分组时，所有的数据一同进行计算。(所以不能从个别的列获取数据)。</p>
+<p>3.GROUP BY 子句都必须时检索列或者是有效的表达式，但不能是聚集函数。如果在SELECT中使用表达式，则必须在GROUP BY中指定相同的表达式，不能使用别名。</p>
+<p>4.除聚集函数之外，SELECT语句中每一个列都必须在GROUP BY 子句中给出。</p>
+<p>5.如果分组具有NULL，则NULL将作为一个分组返回，如果列有多个NULL，他们将返回同一个分组。</p>
+<p>6.GROUP BY 子句必须在WHERE 子句之后，ORDER BY子句之前。</p>
+<p>**使用ROLL UP ** 使用ROLL UP 可以得到每一个分组以及每个分组的汇总级别（针对每一个分组）值</p>
+<h6 id="使用having-进行过滤分组">使用HAVING 进行过滤分组</h6>
+<p>HAVIN和WHERE相似，不同之处在于WHERE过滤行，HAVING过滤分组。</p>
+<p><strong>WHERE 和HAVING的区别</strong> 还有一种理解两种的区别之处，可以理解为WHERE在分组之前过滤，HAVING在分组之后进行过滤。因此WHERE过滤掉的值在分组中不会出现，可能会改变计算值，分组如果基于这些值进行过滤，那么就会导致结果会有所不同。</p>
+<h6 id="使用order-by进行排序">使用ORDER BY进行排序</h6>
+<p>分组和排序的区别</p>
+<table>
+<thead>
+<tr>
+<th>OEDER BY</th>
+<th>GROUP BY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>排序产生的输出</td>
+<td>分组行。但可能不是分组的排序</td>
+</tr>
+<tr>
+<td>任意列都可以使用(非选择的列也可以使用)</td>
+<td>只能使用选择的列或者表达式列，而且必须使用每个选择表达式</td>
+</tr>
+<tr>
+<td>不一定需要</td>
+<td>如果和聚集函数一起使用列(表达式),则必须使用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>不要忘记ORDER BY</strong> 一般在使用GROUP BY子句时，应该也给<br>
+出ORDER BY子句。这是保证数据正确排序的唯一方法。千万<br>
+不要仅依赖GROUP BY排序数据。</p>
+<h5 id="8select子句顺序">8.SELECT子句顺序</h5>
+<table>
+<thead>
+<tr>
+<th>子句</th>
+<th>使用说明</th>
+<th>是否必须使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT</td>
+<td>要返回的列或表达式</td>
+<td>是</td>
+</tr>
+<tr>
+<td>FROM</td>
+<td>从中检索数据的表</td>
+<td>仅在表选择数据时使用</td>
+</tr>
+<tr>
+<td>WHERE</td>
+<td>行级过滤</td>
+<td>否</td>
+</tr>
+<tr>
+<td>GROUP BY</td>
+<td>分组过滤</td>
+<td>仅在按组过滤时使用</td>
+</tr>
+<tr>
+<td>HAVING</td>
+<td>组级过滤</td>
+<td>否</td>
+</tr>
+<tr>
+<td>ORDER BY</td>
+<td>输出排序顺序</td>
+<td>否</td>
+</tr>
+<tr>
+<td>LIMIT</td>
+<td>要检索的行数</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MySQL 语句2]]></title>
+        <id>https://github.com/yuuri/post/mysql-yu-ju-2</id>
+        <link href="https://github.com/yuuri/post/mysql-yu-ju-2">
+        </link>
+        <updated>2019-09-26T02:47:35.000Z</updated>
+        <content type="html"><![CDATA[<p>[TOC]</p>
+<h4 id="1通配符进行过滤like操作符">1.通配符进行过滤(LIKE操作符)</h4>
+<h5 id="11使用">1.1使用%</h5>
+<pre><code>SHOW VARIABLES WHERE Variable_name LIKE 'character_set%';
+</code></pre>
+<p>上面的SQL语句是查询MySQL字符集设置情况信息。结果如下：</p>
+<pre><code>mysql&gt; SHOW VARIABLES WHERE Variable_name LIKE 'character_set%';
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | utf8mb4                    |
+| character_set_connection | utf8mb4                    |
+| character_set_database   | utf8mb4                    |
+| character_set_filesystem | binary                     |
+| character_set_results    | utf8mb4                    |
+| character_set_server     | utf8mb4                    |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+8 rows in set (0.00 sec)
+</code></pre>
+<p>根据MySQL的配置，搜索时可以区分大小写的，如果设置区分大小写，查找字段为 ‘Character_set%’，将不会出现上面示例的结果。</p>
+<p>%可以在任意位置使用，也可以使用多个%</p>
+<p><strong>注意尾空格</strong>   如果某一个字段尾部含有空格  ‘%[某个字段]’ 将不会有匹配结果，解决方式时可以在最后也加上一个% 例如‘%[某个字段]%’，还有一种方法是使用函数去除尾部空格。</p>
+<p><strong>注意NULL</strong> 虽然%可以匹配任意字符，但是除了NULL，即使是‘%’ 也不能匹配NULL</p>
+<h5 id="12-使用_">1.2 使用_</h5>
+<p><em>和%效果一样，但是</em>_ 匹配的是单个字符。</p>
+<h4 id="2使用正则进行搜索">2.使用正则进行搜索</h4>
+<h5 id="21基本字符匹配">2.1基本字符匹配</h5>
+<pre><code>select project_name,id from git_project where project_name REGEXP 'd';
+</code></pre>
+<p>结果如下</p>
+<pre><code>mysql&gt; select project_name,id from git_project where project_name REGEXP 'd';
++----------------------------------------+----+
+| project_name                           | id |
++----------------------------------------+----+
+| torvalds/linux                         | 10 |
+| EbookFoundation/free-programming-books | 11 |
+| sindresorhus/awesome                   | 12 |
+| getify/You-Dont-Know-JS                | 13 |
+| kamranahmedse/developer-roadmap        | 16 |
+| d3/d3                                  | 17 |
+| microsoft/vscode                       | 18 |
+| tensorflow/models                      | 26 |
+| ytdl-org/youtube-dl                    | 27 |
+| mrdoob/three.js                        | 29 |
+| reduxjs/redux                          | 35 |
+| django/django                          | 40 |
+| lodash/lodash                          | 42 |
++----------------------------------------+----+
+13 rows in set (0.00 sec)
+
+</code></pre>
+<p><strong>LIKE 与REGEXP的区别</strong> LIKE匹配整个列，如果匹配的文本在列值中出现，LIKE将不会匹配。REGEXP 在列值中进行匹配，如果匹配的文本在列值中出现，将会进行匹配，并返回相应的值。</p>
+<p><strong>匹配不区分大小写</strong> MySQL的正则表达式匹配在版本3.2.3之后不区分大小写，即大写小写都匹配。如果你确实想要区分大小写可以使用BINARY关键字，如</p>
+<pre><code>select project_name,id where project_name REGEXP BINARY 'You'
+</code></pre>
+<p>例子如下</p>
+<pre><code>mysql&gt; select project_name,id from git_project where project_name REGEXP BINARY 'You';
++-------------------------+----+
+| project_name            | id |
++-------------------------+----+
+| getify/You-Dont-Know-JS | 13 |
++-------------------------+----+
+1 row in set (0.00 sec)
+
+mysql&gt; select project_name,id from git_project where project_name REGEXP  'You';
++-------------------------+----+
+| project_name            | id |
++-------------------------+----+
+| getify/You-Dont-Know-JS | 13 |
+| ytdl-org/youtube-dl     | 27 |
++-------------------------+----+
+2 rows in set (0.00 sec)
+</code></pre>
+<h5 id="22进行or匹配">2.2进行OR匹配</h5>
+<p>|为正则表达式中的OR 操作符，表示匹配其中之一。</p>
+<pre><code>mysql&gt; select project_name,id from git_project where project_name REGEXP  'djan|linux';
++----------------+----+
+| project_name   | id |
++----------------+----+
+| torvalds/linux | 10 |
+| django/django  | 40 |
++----------------+----+
+2 rows in set (0.00 sec)
+</code></pre>
+<h5 id="23-匹配几个字符之一">2.3 匹配几个字符之一</h5>
+<p>使用[]符号</p>
+<p>字符集合也可以被否定，即，它们将匹配除指定字符外的任何东西。<br>
+为否定一个字符集，在集合的开始处放置一个^即可。因此，尽管[123]<br>
+匹配字符1、2或3，但[^123]却匹配除这些字符外的任何东西</p>
+<h5 id="24匹配范围">2.4匹配范围</h5>
+<p>[0-9] 匹配所有数字,</p>
+<p>[a-z]匹配所有字母</p>
+<h5 id="25匹配特殊字符">2.5匹配特殊字符</h5>
+<p>匹配特殊字符需要使用转义符号 \</p>
+<pre><code>select project_name,id from git_project where REGEXP '\\.'
+</code></pre>
+<p>同时为了匹配 \本身 需要使用'\\'</p>
+<p>多数正则表达式实现使用单个反斜杠转义特殊字符，<br>
+以便能使用这些字符本身。但MySQL要求两个反斜杠（MySQL<br>
+自己解释一个，正则表达式库解释另一个）。</p>
+<p>具有特殊含义的元字符</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">\\f</td>
+<td>换页</td>
+</tr>
+<tr>
+<td style="text-align:left">\\n</td>
+<td>换行</td>
+</tr>
+<tr>
+<td style="text-align:left">\\r</td>
+<td>回车</td>
+</tr>
+<tr>
+<td style="text-align:left">\\t</td>
+<td>制表</td>
+</tr>
+<tr>
+<td style="text-align:left">\\v</td>
+<td>纵向制表</td>
+</tr>
+</tbody>
+</table>
+<h5 id="26-匹配字符类">2.6 匹配字符类</h5>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[:alnum:]</td>
+<td>任意字母和数字(0-9A-Za-z)</td>
+</tr>
+<tr>
+<td>[:alpha:]</td>
+<td>任意字符(a-zA-Z)</td>
+</tr>
+<tr>
+<td>[:blank:]</td>
+<td>空格和制表(\\t)</td>
+</tr>
+<tr>
+<td>[:cntrl:]</td>
+<td>ASCII控制字符(ASCII 0到31和127)</td>
+</tr>
+<tr>
+<td>[:digit:]</td>
+<td>任意数字(0-9)</td>
+</tr>
+<tr>
+<td>[:graph:]</td>
+<td>和[:print:]一样但不包括空格</td>
+</tr>
+<tr>
+<td>[:lower:]</td>
+<td>任意小写字母(a-z)</td>
+</tr>
+<tr>
+<td>[:print:]</td>
+<td>可打印任何字符</td>
+</tr>
+<tr>
+<td>[:punct:]</td>
+<td>既不在[:alnum:]又不在[:cntrl:]的字符</td>
+</tr>
+<tr>
+<td>[:space:]</td>
+<td>包括空格在内的任意空白字符(\\f,\\n,\\t,\\r,\\v)</td>
+</tr>
+<tr>
+<td>[:upper:]</td>
+<td>任意大写字母(A-Z)</td>
+</tr>
+<tr>
+<td>[:xdigit:]</td>
+<td>任意十六进制数字(a-fA-F0-9)</td>
+</tr>
+</tbody>
+</table>
+<p>使用例子：</p>
+<pre><code>select project_name,id,project_url from git_project where project_url REGEXP '[[:digit:]]';
+</code></pre>
+<pre><code>mysql&gt; select project_name,id,project_url from git_project where project_url REGEXP '[[:digit:]]';
++------------------+----+-----------------------------------------------+
+| project_name     | id | project_url                                   |
++------------------+----+-----------------------------------------------+
+| d3/d3            | 17 | https://api.github.com/repos/d3/d3            |
+| CyC2018/CS-Notes | 24 | https://api.github.com/repos/CyC2018/CS-Notes |
++------------------+----+-----------------------------------------------+
+2 rows in set (0.00 sec)
+</code></pre>
+<h5 id="27匹配多个实例">2.7匹配多个实例</h5>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>0个或多个</td>
+</tr>
+<tr>
+<td>+</td>
+<td>一个或多个</td>
+</tr>
+<tr>
+<td>？</td>
+<td>0个或1个</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>指定数量的匹配</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>不少于指定数目的匹配</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>匹配数目的范围(m不超过255)</td>
+</tr>
+</tbody>
+</table>
+<h5 id="28-定位符">2.8 定位符</h5>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>^</td>
+<td>文本的开始</td>
+</tr>
+<tr>
+<td>$</td>
+<td>文本的结尾</td>
+</tr>
+<tr>
+<td>[[:&lt;:]]</td>
+<td>词的开始</td>
+</tr>
+<tr>
+<td>[[:&gt;:]]</td>
+<td>词的结尾</td>
+</tr>
+</tbody>
+</table>
+<p><strong>^的双重用途</strong> ^有两种用法。在集合中（用[和]定义），用它<br>
+来否定该集合，否则，用来指串的开始处。</p>
+<p><strong>在REGEXP中使用和LIKE同样的效果</strong> LIKE和REGEXP的不同之处在于，LIKE匹配整个字符串而REGEXP匹配子串。利用定位符，通过用^开始每个表达式  $结束每个表达式，可以使REGEXP和LIKE一样</p>
+<p><strong>简单的正则表达式检测</strong> 可以在不使用数据库表的情况下来测试正则表达式，REGEXP总是返回0(没有匹配)或1(正确匹配) ，可以使用带文字的REGEXP来测试表达式，并试验他们，相应的语法如下：</p>
+<pre><code>mysql&gt; select 'hello' REGEXP '[[:digit:]]';
++------------------------------+
+| 'hello' REGEXP '[[:digit:]]' |
++------------------------------+
+|                            0 |
++------------------------------+
+1 row in set (0.00 sec)
+
+</code></pre>
+<pre><code>mysql&gt; select 'hello1' REGEXP '[[:digit:]]';
++-------------------------------+
+| 'hello1' REGEXP '[[:digit:]]' |
++-------------------------------+
+|                             1 |
++-------------------------------+
+1 row in set (0.00 sec)
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[指针]]></title>
+        <id>https://github.com/yuuri/post/zhi-zhen</id>
+        <link href="https://github.com/yuuri/post/zhi-zhen">
+        </link>
+        <updated>2019-09-26T01:14:56.000Z</updated>
+        <content type="html"><![CDATA[<h5 id="1内存和地址">1.内存和地址</h5>
+<p>​	计算机的内存有数以一万记的位(bit)组成，每个位可以容纳值0或1.由于一个位所能表示的值范围太有限，所以单独的位用处不大。通常许多位组合成一组，这样就可以存储范围较大的值。</p>
+<p>​	在许多现代的机器上每个字节包含8位，可以存储无符号值0至255，或有符号值-128至127。内存中的每一个位置总是包含一些值。每个字节通过地址来标识。</p>
+<p>​	为了存储更大的值，我们把两个或更多字节组合在一起作为一个更大的内存单位。</p>
+<p>​	计算机内存中的每个位置都是由一个地址标识，通常，邻近的内存位置合成一组，这样就允许存储更大范围的值。指针就是它的值表示内存地址的变量。</p>
+<p>​	无论是程序员还是计算机都无法通过值的位模式来判断它的类型。类型是通过值的使用方法隐式的确定的。编译器能够保证值的声明和值的使用之间的关系是适当的，从而帮助我们确定值是适当的类型。</p>
+<p>​	指针变量的值并非它所指向的内存位置所存储的值。我们必须使用间接访问来获得它所指向位置存储的值。对一个“指向整型的指针”施加间接访问操作的结果将是一个整型值。</p>
+<p>​	声明一个指针变量并不会自动分配任何内存。在对指针执行间接访问前，指针必须进行初始化；或者使他指向现有的内存，或者给他分配动态内存。对未初始化的指针变量执行间接访问操作时非法的，而且这种错误常常难以检测。其结果常常是一个不相关的值被修改。这种错误是很难被调试发现的。</p>
+<p>​	NULL指针就是不指向任何东西的指针。它可以赋值给一个指针，用于表示那个指针并不指向任何值。对NULL指针执行的间接访问操作的后果因编译器而异，两个常见的后果分别是返回内存位置零的值以及终止程序。</p>
+<p>​	和任何其他变量一样，指针变量也可以作为左值使用。对指针执行间接访问操作所产生的值也是左值，因为这种表达式标识了一个特定的内存位置。</p>
+<p>​	除了NULL指针之外，再也没有任何内奸的记法来表示指针常量，因为程序员通常无法预测编译器会把变量放在内存的什么位置。在极少见的情况下，我们偶尔需要使用指针常量，这是我们可以通过吧一个整型值强制转换为指针类型来创建它。</p>
+<p>​	在指针值上可以执行一些有限的算术运算。你可以把一个整型值加到一个指针上，也可以从一个指针减去一个整型值。在这两种情况下，这个整型值会进行调整，原值将乘以指针目标类型的长度。这样对一个指针加1将使他指向下一个变量，至于该变量在内存中占几个字节的大小则与此无关。</p>
+<p>​	然而，指针运算只有作用于数组其结果才是可以预测的。对任何并非指向数组元素的指针执行算术运算是非法的（但常常很难被检测到）。如果一个指针减去一个整数后，运算结果产生的指针所指向的位置是在数组第一个元素之前，那么它也是非法的。假发运算稍有不同，如果结果指针指向数组最后一个元素后面的那个内存位置仍是合法的（但不能对这个指针执行间接访问操作），不过再往后就不合法了。</p>
+<p>​	如果两个指针都指向同一个数组中的元素，那么他们之间可以相减。指针减法的结果经过调整（除以数组元素类型的长度），表示两个指针在数组中相隔多少个元素。如果两个指针并不是指向同一个数组的元素，那么他们之间进行相减就是错误的。</p>
+<p>​	任何指针之间都可以进行比较，测试他们相等或不相等。如果两个指针都指向同一个数组中的元素。那么他们之间还可以执行&lt;,&lt;=,&gt;和&gt;=等关系运算，用于判断他们在数组中的相对位置。对于两个不相关的指针执行关系运算，其结果是未定义的。</p>
+<p><strong>提示：</strong></p>
+<p>​	1.一个值应该只具有一种意思</p>
+<p>​	2.如果指针并不指向任何有意义的东西，就把他设置为NULL</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MySQL语句1]]></title>
+        <id>https://github.com/yuuri/post/mysql-bi-zhi-bi-hui-1</id>
+        <link href="https://github.com/yuuri/post/mysql-bi-zhi-bi-hui-1">
+        </link>
+        <updated>2019-09-23T00:58:59.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="mysql命令">MySQL命令</h3>
+<hr>
+<p>[TOC]</p>
+<h4 id="1使用mysql">1.使用MySQL</h4>
+<p>显示表中可用的<strong>Column</strong></p>
+<pre><code class="language-mysql">show columns from git_project;
+</code></pre>
+<p>输出如下</p>
+<pre><code>+--------------+--------------+------+-----+---------------------+----------------+
+| Field        | Type         | Null | Key | Default             | Extra          |
++--------------+--------------+------+-----+---------------------+----------------+
+| id           | int(11)      | NO   | PRI | NULL                | auto_increment |
+| project_name | varchar(100) | YES  |     | NULL                |                |
+| project_id   | int(11)      | YES  |     | NULL                |                |
+| project_url  | varchar(100) | YES  |     | NULL                |                |
+| project_date | timestamp    | YES  |     | NULL                |                |
+| created_at   | timestamp    | NO   |     | 0000-00-00 00:00:00 |                |
++--------------+--------------+------+-----+---------------------+----------------+
+6 rows in set (0.00 sec)
+</code></pre>
+<blockquote>
+<p>MySQL支持DESCRIBE作为SHOW COLUMNS FROM 的一种快捷方式。也就是说DESCRIBE git_project 是SHOW COLUMNS FROM git_project的一种快捷方式</p>
+</blockquote>
+<p>DESC 和ASC分别是对结果进行降序和升序排序，但是如果执行DESC git_project发现 和SHOW COLUMN FROM git_project 以及 DESCRIBE git_project 的输出结果是一样的。</p>
+<h5 id="显示服务器状态">显示服务器状态</h5>
+<pre><code>SHOW STATUS
+</code></pre>
+<h5 id="显示创建数据库或者创建表的语句">显示创建数据库或者创建表的语句</h5>
+<pre><code>SHOW CREATE DATABASES
+</code></pre>
+<pre><code>SHOW CREATE TABLE
+</code></pre>
+<h5 id="显示授予用户的权限">显示授予用户的权限</h5>
+<pre><code>SHOW GRANTS
+</code></pre>
+<h5 id="显示服务器错误或者警告信息">显示服务器错误或者警告信息</h5>
+<pre><code>SHOW ERRORS
+</code></pre>
+<pre><code>SHOW WARNINGS
+</code></pre>
+<hr>
+<h4 id="2检索数据">2.检索数据</h4>
+<p><strong>SQL语句是不区分大小写的，因此SELECT 和select是一样的。通常对SQL关键字使用大写，对数据库名，表名，字段名使用小写。这样做是代码更易于阅读和调试。</strong></p>
+<h5 id="检索不同的行使用distinct关键字">检索不同的行（使用DISTINCT关键字）</h5>
+<pre><code>select distinct pull_number from commits;
+</code></pre>
+<p>(1).<strong>如果使用DISTINCT关键字 它必须直接放在列名前</strong></p>
+<p>(2).不能部分使用DISTINCT关键字，例如</p>
+<pre><code>select distinct a,b from tableA limit 10;
+</code></pre>
+<p>除非指定的两个列都不同，否则所有行将被输出</p>
+<p>此时是将a,b两列所有不同的组合全部列出来，而不仅仅只是distinct a</p>
+<p>相当于以下语句</p>
+<pre><code class="language-mysql">select a,b,c from tableA group by a,b,c
+</code></pre>
+<p>实际结果如下：</p>
+<pre><code>+-------------+----+
+| pull_number | id |
++-------------+----+
+|        1061 |  1 |
+|        1061 |  2 |
+|        1061 |  3 |
+|        1061 |  4 |
+|        1001 |  5 |
+|         634 |  6 |
+|        1036 |  7 |
+|         917 |  8 |
+|         693 |  9 |
+|         591 | 10 |
++-------------+----+
+10 rows in set (0.00 sec)
+</code></pre>
+<p>通过如下验证，可知所有行都被输出。</p>
+<pre><code>mysql&gt; select count(1) from commits;
++----------+
+| count(1) |
++----------+
+|    22788 |
++----------+
+1 row in set (0.00 sec)
+
+
+mysql&gt; select count(distinct pull_number,id ) from commits ;
++---------------------------------+
+| count(distinct pull_number,id ) |
++---------------------------------+
+|                           22788 |
++---------------------------------+
+1 row in set (0.01 sec)
+
+</code></pre>
+<h5 id="限制结果limit-关键字">限制结果（LIMIT 关键字）</h5>
+<pre><code>select distinct pull_number from commits limit 10;
+</code></pre>
+<p>LIMIT 后跟显示显示的条数</p>
+<p>(1).检索出来的第一行是行0,而不是行1。</p>
+<p>(2).行数小于限制数，则只会显示实际的行数</p>
+<hr>
+<h4 id="3排序检索数据">3.排序检索数据</h4>
+<h5 id="使用order-by">使用ORDER BY</h5>
+<p>ORDER BY 可以取一个或多个列的名字，据此进行输出。</p>
+<pre><code>select * from commits order by project,pull_number,commit_date limit 2；
+</code></pre>
+<p>结果如下：</p>
+<pre><code>mysql&gt; select * from commits order by project,pull_number,commit_date limit 2\G;
+*************************** 1. row ***************************
+         id: 18343
+pull_number: 11
+ commit_sha: 930d44d79fcc687070d63cdfd1497556572004e5
+ commit_msg: support to log null and undefined to the repl from an extension (fixes #9)
+commit_date: 2015-11-16 06:42:04
+ user_email: benjpas@microsoft.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+*************************** 2. row ***************************
+         id: 18328
+pull_number: 25
+ commit_sha: a8c6596266df01acd4fac3529091795476f0cec7
+ commit_msg: C# bracket insertion, indentation not working #4
+commit_date: 2015-11-16 09:48:04
+ user_email: martinae@microsoft.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+2 rows in set (0.00 sec)
+
+ERROR: 
+No query specified
+</code></pre>
+<p>默认是升序排序，如果要是用降序排序可使用desc</p>
+<p>如果想要对多个列进行降序排序，必须显性的对每一个列进行进行指定。</p>
+<h5 id="order-by-的位置">ORDER BY 的位置</h5>
+<p>ORDER BY 必须在FROM 之后 LIMIT之前</p>
+<p>使用group by 报错1055</p>
+<p><a href="https://blog.csdn.net/qq_34581118/article/details/78228262">https://blog.csdn.net/qq_34581118/article/details/78228262</a></p>
+<hr>
+<h4 id="4过滤数据">4.过滤数据</h4>
+<p>使用WHERE 过滤数据</p>
+<h5 id="1where-子句在from之后">1.WHERE 子句在FROM之后，</h5>
+<pre><code>select * from commits where pull_number between 100 and 2000 order by pull_number asc limit 10\G;
+</code></pre>
+<p>如果使用WHERE,应该让ORDER BY 在WHERE 之后，否则会发生错误。</p>
+<h5 id="2不匹配检查">2.不匹配检查</h5>
+<pre><code>select * from commits where project &lt;&gt; 'TheAlgorithms/Python' and pull_number between 100 and 2000 order by pull_number limit 10\G;
+</code></pre>
+<h6 id="不匹配检查可以使用-符号-也可以使用-这两个符号效果是一样的">不匹配检查可以使用 &lt;&gt; 符号 也可以使用！= 这两个符号效果是一样的。</h6>
+<h6 id="where-子句可以用and-或者or-操作符来进行多个条件匹配">WHERE 子句可以用AND 或者OR 操作符来进行多个条件匹配</h6>
+<h5 id="3空值检查">3.空值检查</h5>
+<pre><code>select * from commits where pull_number is NULL;
+</code></pre>
+<p>如果不存在NULL值则返回为空，</p>
+<blockquote>
+<p><strong>NULL与不匹配</strong> 在通过过滤选择出不具有特定值的行时，你<br>
+可能希望返回具有NULL值的行。但是，不行。因为未知具有<br>
+特殊的含义，数据库不知道它们是否匹配，所以在匹配过滤<br>
+或不匹配过滤时不返回它们。<br>
+因此，在过滤数据时，一定要验证返回数据中确实给出了被<br>
+过滤列具有NULL的行。</p>
+</blockquote>
+<h5 id="计算次序">计算次序</h5>
+<p>有这样一个SQL语句</p>
+<pre><code>select * from commits where pull_number = 70748 or pull_number = 105 and id &gt; 10000 limit 2;
+</code></pre>
+<p>结果如下</p>
+<pre><code class="language-fortran">*************************** 1. row ***************************
+         id: 7373
+pull_number: 70748
+ commit_sha: 2f89a79efe43f5d9bd82071f4dab514cf82a379a
+ commit_msg: api proposal, add call hierarchy contrib
+commit_date: 2019-03-14 15:14:04
+ user_email: johannes.rieken@gmail.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+*************************** 2. row ***************************
+         id: 7374
+pull_number: 70748
+ commit_sha: c9a8a1d08fd81ba9d5cbcc5b75d7e1b7a25cc8a4
+ commit_msg: simple tree UX
+commit_date: 2019-03-14 16:56:05
+ user_email: johannes.rieken@gmail.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+2 rows in set (0.00 sec)
+
+</code></pre>
+<p>发现结果未按预期执行，原因在于 SQL预先处理AND符号。因此条件过滤语句被理解为 pull_number = 70748所有值 和 pull_number =105 且id&gt;10000 的两个条件</p>
+<p>要按预期 执行可加上括号，如下</p>
+<pre><code>select * from commits where (pull_number = 70748 or pull_number = 100 ) and id &gt; 7374 limit 2\G
+</code></pre>
+<p>执行结果</p>
+<pre><code>*************************** 1. row ***************************
+         id: 7375
+pull_number: 70748
+ commit_sha: b01e65cf7fff893cea53f4d19b0afe19e1d78481
+ commit_msg: add action to context menu
+commit_date: 2019-03-15 09:15:02
+ user_email: johannes.rieken@gmail.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+*************************** 2. row ***************************
+         id: 7376
+pull_number: 70748
+ commit_sha: 3a3b62c1cbc6243c19f2adda14722e0fe44cf085
+ commit_msg: show calls as columns
+commit_date: 2019-03-15 14:55:01
+ user_email: johannes.rieken@gmail.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+2 rows in set (0.01 sec)
+
+</code></pre>
+<blockquote>
+<p><strong>在WHERE子句中使用圆括号</strong> 任何时候使用具有AND和OR操作<br>
+符的WHERE子句，都应该使用圆括号明确地分组操作符。不要<br>
+过分依赖默认计算次序，即使它确实是你想要的东西也是如<br>
+此。使用圆括号没有什么坏处，它能消除歧义</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Numpy 中的省略号]]></title>
+        <id>https://github.com/yuuri/post/numpy-zhong-de-sheng-lue-hao</id>
+        <link href="https://github.com/yuuri/post/numpy-zhong-de-sheng-lue-hao">
+        </link>
+        <updated>2019-09-20T03:46:37.000Z</updated>
+        <content type="html"><![CDATA[<p>在看sklearn代码关于线性模型中看到了一个代码中出现了<code>x[..., 1]</code> 这样子的代码。在平常的使用中会有<code>x[:,1]</code>这样的例子，但是<code>x[...,1]</code>这样的例子还是第一次遇到。</p>
+<p>同时发现Python自带的list不支持这样的用法，应该是Numpy特有的方法。</p>
+<p>查阅文档后发现是这么描述的</p>
+<p>The <strong>dots</strong> (<code>...</code>) represent as many colons as needed to produce a complete indexing tuple. For example, if <code>x</code> is an array with 5 axes, then</p>
+<ul>
+<li>
+<p><code>x[1,2,...]</code> is equivalent to <code>x[1,2,:,:,:]</code>,</p>
+</li>
+<li>
+<p><code>x[...,3]</code> to <code>x[:,:,:,:,3]</code> and</p>
+</li>
+<li>
+<p><code>x[4,...,5,:]</code> to <code>x[4,:,:,5,:]</code>.</p>
+<pre><code>&gt;&gt;&gt; c = np.array( [[[  0,  1,  2],               # a 3D array (two stacked 2D arrays)
+...                 [ 10, 12, 13]],
+...                [[100,101,102],
+...                 [110,112,113]]])
+&gt;&gt;&gt; c.shape
+(2, 2, 3)
+&gt;&gt;&gt; c[1,...]                                   # same as c[1,:,:] or c[1]
+array([[100, 101, 102],
+       [110, 112, 113]])
+&gt;&gt;&gt; c[...,2]                                   # same as c[:,:,2]
+array([[  2,  13],
+       [102, 113]])
+</code></pre>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MySQL 导出查询结果到文件]]></title>
+        <id>https://github.com/yuuri/post/mysql-dao-chu-cha-xun-jie-guo-dao-wen-jian</id>
+        <link href="https://github.com/yuuri/post/mysql-dao-chu-cha-xun-jie-guo-dao-wen-jian">
+        </link>
+        <updated>2019-09-19T02:06:21.000Z</updated>
+        <content type="html"><![CDATA[<h4 id="mysql-导出查询结果到文件">MySQL 导出查询结果到文件</h4>
+<p>输出带自增长序号</p>
+<pre><code>mysql -ugit -pgit -e 'SELECT @num:=@num+1 AS 序号, a.* FROM  git_project a ,(SELECT @num:=0) r;'&gt;project_list.csv
+</code></pre>
+<p>导出到文件</p>
+<pre><code>select * from table into outfile '/tmp/table.csv' fields terminated by ',' optionally enclosed by '&quot;' lines terminated by '\r\n';
+</code></pre>
+<p>遇到问题</p>
+<pre><code>ERROR 1290 (HY000): The MySQL server is running with the --secure-file-priv option so it cannot execute this statement
+</code></pre>
+<p>原因是</p>
+<p>--secure-file-priv参数限制输出文件位置</p>
+<p>使用命令查看参数</p>
+<pre><code>show global variables like '%secure_file_priv%';
+</code></pre>
+<ul>
+<li>secure_file_priv 为 NULL 时，表示限制mysqld不允许导入或导出。</li>
+<li>secure_file_priv 为 /tmp 时，表示限制mysqld只能在/tmp目录中执行导入导出，其他目录不能执行。</li>
+<li>secure_file_priv 没有值时，表示不限制mysqld在任意目录的导入导出。</li>
+</ul>
+<p>windows下：修改my.ini 在[mysqld]内加入secure_file_priv =</p>
+<p>linux下：修改my.cnf 在[mysqld]内加入secure_file_priv =</p>
+<p>MYSQL新特性secure_file_priv对读写文件的影响</p>
+<p>然后重启mysql，再查询secure_file_priv</p>
+<pre><code>SELECT @num:=@num+1 AS 序号, a.* FROM  git_project a ,(SELECT @num:=0) r into outfile '/var/lib/mysql-files/table.csv' fields terminated by ',' optionally enclosed by '&quot;' lines terminated by '\r\n';
+</code></pre>
+<pre><code>SELECT @num:=@num+1 AS 序号, a.project_name FROM  git_project a ,(SELECT @num:=0) r into outfile '/var/lib/mysql-files/table.csv' fields terminated by ',' optionally enclosed by '&quot;' lines terminated by '\r\n';
+</code></pre>
+<p>如果直接在终端上运行可执行如下命令（注意 如果是单个引号，要进行转义 使用 \ 符号）</p>
+<pre><code>mysql -uroot -p2wsx#EDC -D github -e &quot;SELECT @num:=@num+1 AS 序号, a.project_name FROM  git_project a ,(SELECT @num:=0) r into outfile '/var/lib/mysql-files/table.csv' fields terminated by ',' optionally enclosed by '\&quot;' lines terminated by '\r\n'&quot;
+</code></pre>
+<p>使用子查询，对结果进行排序</p>
+<pre><code>mysql -uroot -proot -D git -e &quot;select @num:=@num+1 as 序号,result.file_name as file from (select distinct(a.file_name),a.project from request_file as a where a.project='pytorch/pytorch') as result,(select @num:=0) r&quot;
+</code></pre>
+<pre><code>mysql -uroot -proot -D git -e &quot;select @num:=@num+1 as 序号,result.file_name as file from (select distinct(a.file_name),a.project from request_file as a where a.project='pytorch/pytorch'order by file_name) as result,(select @num:=0) r into outfile '/tmp/distinct_file.csv' fields terminated by ',' optionally enclosed by '\&quot;' lines terminated by '\r\n'&quot;
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MySQL 查询数据占用磁盘容量]]></title>
+        <id>https://github.com/yuuri/post/mysql-cha-xun-shu-ju-zhan-yong-ci-pan-rong-liang</id>
+        <link href="https://github.com/yuuri/post/mysql-cha-xun-shu-ju-zhan-yong-ci-pan-rong-liang">
+        </link>
+        <updated>2019-09-18T01:32:10.000Z</updated>
+        <content type="html"><![CDATA[<p>查询所有数据占用磁盘容量信息</p>
+<pre><code class="language-mysql">select TABLE_SCHEMA, concat(truncate(sum(data_length)/1024/1024,2),' MB') as data_size,
+concat(truncate(sum(index_length)/1024/1024,2),'MB') as index_size
+from information_schema.tables
+group by TABLE_SCHEMA
+order by data_length desc;
+</code></pre>
+<p>查询单个数据占用磁盘容量信息（TestDB为要查询的数据库）</p>
+<pre><code class="language-mysql">select TABLE_NAME, concat(truncate(data_length/1024/1024,2),' MB') as data_size,
+concat(truncate(index_length/1024/1024,2),' MB') as index_size
+from information_schema.tables where TABLE_SCHEMA = 'TestDB'
+group by TABLE_NAME
+order by data_length desc;
+</code></pre>
+<p>1.TRUNCATE(X,D)</p>
+<p>Returns the number X, truncated to D decimal places. If D is 0, the result has no decimal point or fractional part. D can be negative to cause D digits left of the decimal point of the value X to become zero.<br>
+返回数字X，截断到D小数位。 如果D为0，结果没有小数点或小数部分。 D是负数，导致值X的小数点左边的D数字变为零。</p>
+<p>2.如果TRUNCATE TABLE 则是<strong>删除表</strong>，在数据量比较大的情况下 效率比DELETE要高。</p>
+<blockquote>
+<p>1、DROP删表，表结构将删了，当然数据也不存在了<br>
+2、TRUNCATE和DELETE删数据，表结构还在<br>
+3、DELETE可以带条件删除，TRUNCATE是全部删除<br>
+4、DELETE删除会写日志，TRUNCATE不写<br>
+5、DELETE效率低，数据可以恢复，TRUNCATE效率高，数据不可恢复</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[pip 安装mysqlclient报错]]></title>
+        <id>https://github.com/yuuri/post/pip-an-zhuang-mysqlclient-bao-cuo</id>
+        <link href="https://github.com/yuuri/post/pip-an-zhuang-mysqlclient-bao-cuo">
+        </link>
+        <updated>2019-09-16T06:58:41.000Z</updated>
+        <content type="html"><![CDATA[<p>1.报错信息如下：</p>
+<pre><code>pip install mysql-python fails with EnvironmentError: mysql_config not found
+</code></pre>
+<p>2.解决办法</p>
+<pre><code>yum install python-devel mysql-devel
+</code></pre>
+<pre><code>sudo apt update
+sudo apt install python-dev
+sudo apt install python-MySQLdb
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python3 使用虚拟环境]]></title>
+        <id>https://github.com/yuuri/post/python3-shi-yong-xu-ni-huan-jing</id>
+        <link href="https://github.com/yuuri/post/python3-shi-yong-xu-ni-huan-jing">
+        </link>
+        <updated>2019-09-16T05:41:23.000Z</updated>
+        <content type="html"><![CDATA[<p>0.在Ubuntu环境下需要安装python3-venv</p>
+<pre><code class="language-shell">apt-get install python3-venv
+</code></pre>
+<p>1.创建虚拟环境</p>
+<pre><code class="language-shell">python3 -m venv test-env
+</code></pre>
+<p>如果这个文件不存在将会默认在当前目录下创建test-env的文件夹。</p>
+<p>2.启动虚拟环境（Linux环境）</p>
+<pre><code class="language-shell">source test-env/bin/active
+</code></pre>
+<p>3.退出虚拟环境</p>
+<pre><code>deactivate
+</code></pre>
 ]]></content>
     </entry>
 </feed>

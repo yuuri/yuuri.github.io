@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>Elasticsearch 插件安装 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,11 +73,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              Elasticsearch 插件安装
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-09-15
               </span>
               <span>
                 1 min read
@@ -87,7 +87,27 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>1.执行命令</p>
+<pre><code>sudo sh /usr/share/elasticsearch/bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.0.0/elasticsearch-analysis-ik-7.0.0.zip
+</code></pre>
+<p>离线安装</p>
+<pre><code>sudo mkdir /usr/share/elasticsearch/plugins/ik
+</code></pre>
+<pre><code>sudo unzip -d /usr/share/elasticsearch/plugins/ik/ elasticsearch-analysis-ik-7.0.0.zip 
+</code></pre>
+<p>2.开启通过IP:PORT 访问ES （需要root权限账户访问）</p>
+<pre><code>vim  /etc/elasticsearch/elasticsearch.yml
+</code></pre>
+<p>添加如下内容</p>
+<pre><code>network.host: 0.0.0.0
+</code></pre>
+<p>修改参数</p>
+<pre><code>cluster.initial_master_nodes: [&quot;node-1&quot;]
+</code></pre>
+<p>重启es服务</p>
+<pre><code>systemctl status elasticsearch
+systemctl restart elasticsearch
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -100,9 +120,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/elasticsearch-wen-ti-bu-chong">
               <h3 class="post-title">
-                更新vim到8.1
+                Elasticsearch 问题补充
               </h3>
             </a>
           </div>

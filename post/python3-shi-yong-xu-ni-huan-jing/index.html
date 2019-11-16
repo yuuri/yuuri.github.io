@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>Python3 使用虚拟环境 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,11 +73,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              Python3 使用虚拟环境
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-09-16
               </span>
               <span>
                 1 min read
@@ -87,7 +87,19 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>0.在Ubuntu环境下需要安装python3-venv</p>
+<pre><code class="language-shell">apt-get install python3-venv
+</code></pre>
+<p>1.创建虚拟环境</p>
+<pre><code class="language-shell">python3 -m venv test-env
+</code></pre>
+<p>如果这个文件不存在将会默认在当前目录下创建test-env的文件夹。</p>
+<p>2.启动虚拟环境（Linux环境）</p>
+<pre><code class="language-shell">source test-env/bin/active
+</code></pre>
+<p>3.退出虚拟环境</p>
+<pre><code>deactivate
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -100,9 +112,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/shen-jing-wang-luo">
               <h3 class="post-title">
-                更新vim到8.1
+                神经网络
               </h3>
             </a>
           </div>

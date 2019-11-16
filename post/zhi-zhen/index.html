@@ -1,0 +1,198 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>指针 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yuuri/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yuuri">
+  <img class="avatar" src="https://github.com/yuuri/images/avatar.png?v=1573876898580" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              指针
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-26
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h5 id="1内存和地址">1.内存和地址</h5>
+<p>​	计算机的内存有数以一万记的位(bit)组成，每个位可以容纳值0或1.由于一个位所能表示的值范围太有限，所以单独的位用处不大。通常许多位组合成一组，这样就可以存储范围较大的值。</p>
+<p>​	在许多现代的机器上每个字节包含8位，可以存储无符号值0至255，或有符号值-128至127。内存中的每一个位置总是包含一些值。每个字节通过地址来标识。</p>
+<p>​	为了存储更大的值，我们把两个或更多字节组合在一起作为一个更大的内存单位。</p>
+<p>​	计算机内存中的每个位置都是由一个地址标识，通常，邻近的内存位置合成一组，这样就允许存储更大范围的值。指针就是它的值表示内存地址的变量。</p>
+<p>​	无论是程序员还是计算机都无法通过值的位模式来判断它的类型。类型是通过值的使用方法隐式的确定的。编译器能够保证值的声明和值的使用之间的关系是适当的，从而帮助我们确定值是适当的类型。</p>
+<p>​	指针变量的值并非它所指向的内存位置所存储的值。我们必须使用间接访问来获得它所指向位置存储的值。对一个“指向整型的指针”施加间接访问操作的结果将是一个整型值。</p>
+<p>​	声明一个指针变量并不会自动分配任何内存。在对指针执行间接访问前，指针必须进行初始化；或者使他指向现有的内存，或者给他分配动态内存。对未初始化的指针变量执行间接访问操作时非法的，而且这种错误常常难以检测。其结果常常是一个不相关的值被修改。这种错误是很难被调试发现的。</p>
+<p>​	NULL指针就是不指向任何东西的指针。它可以赋值给一个指针，用于表示那个指针并不指向任何值。对NULL指针执行的间接访问操作的后果因编译器而异，两个常见的后果分别是返回内存位置零的值以及终止程序。</p>
+<p>​	和任何其他变量一样，指针变量也可以作为左值使用。对指针执行间接访问操作所产生的值也是左值，因为这种表达式标识了一个特定的内存位置。</p>
+<p>​	除了NULL指针之外，再也没有任何内奸的记法来表示指针常量，因为程序员通常无法预测编译器会把变量放在内存的什么位置。在极少见的情况下，我们偶尔需要使用指针常量，这是我们可以通过吧一个整型值强制转换为指针类型来创建它。</p>
+<p>​	在指针值上可以执行一些有限的算术运算。你可以把一个整型值加到一个指针上，也可以从一个指针减去一个整型值。在这两种情况下，这个整型值会进行调整，原值将乘以指针目标类型的长度。这样对一个指针加1将使他指向下一个变量，至于该变量在内存中占几个字节的大小则与此无关。</p>
+<p>​	然而，指针运算只有作用于数组其结果才是可以预测的。对任何并非指向数组元素的指针执行算术运算是非法的（但常常很难被检测到）。如果一个指针减去一个整数后，运算结果产生的指针所指向的位置是在数组第一个元素之前，那么它也是非法的。假发运算稍有不同，如果结果指针指向数组最后一个元素后面的那个内存位置仍是合法的（但不能对这个指针执行间接访问操作），不过再往后就不合法了。</p>
+<p>​	如果两个指针都指向同一个数组中的元素，那么他们之间可以相减。指针减法的结果经过调整（除以数组元素类型的长度），表示两个指针在数组中相隔多少个元素。如果两个指针并不是指向同一个数组的元素，那么他们之间进行相减就是错误的。</p>
+<p>​	任何指针之间都可以进行比较，测试他们相等或不相等。如果两个指针都指向同一个数组中的元素。那么他们之间还可以执行&lt;,&lt;=,&gt;和&gt;=等关系运算，用于判断他们在数组中的相对位置。对于两个不相关的指针执行关系运算，其结果是未定义的。</p>
+<p><strong>提示：</strong></p>
+<p>​	1.一个值应该只具有一种意思</p>
+<p>​	2.如果指针并不指向任何有意义的东西，就把他设置为NULL</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1%E5%86%85%E5%AD%98%E5%92%8C%E5%9C%B0%E5%9D%80">1.内存和地址</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yuuri/post/mysql-bi-zhi-bi-hui-1">
+              <h3 class="post-title">
+                MySQL语句1
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yuuri/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

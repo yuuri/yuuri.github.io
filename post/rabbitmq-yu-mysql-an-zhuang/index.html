@@ -1,0 +1,260 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RabbitMQ与MySQL安装 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yuuri/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yuuri">
+  <img class="avatar" src="https://github.com/yuuri/images/avatar.png?v=1573876898580" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              RabbitMQ与MySQL安装
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-08-06
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>1.RabbitMQ<br>
+安装erlang</p>
+<pre><code>sudo apt-get install erlang-nox
+</code></pre>
+<p>安装rabbitmq</p>
+<pre><code>sudo apt-get install rabbitmq-server
+</code></pre>
+<p>添加admin，并赋予administrator权限</p>
+<pre><code>sudo rabbitmqctl add_user  admin  admin  
+</code></pre>
+<p>赋予权限</p>
+<pre><code>sudo rabbitmqctl set_user_tags admin administrator 
+</code></pre>
+<p>赋予virtual host中所有资源的配置、写、读权限以便管理其中的资源</p>
+<pre><code>sudo rabbitmqctl  set_permissions -p / admin '.*' '.*' '.*'
+</code></pre>
+<p>Web管理器连接</p>
+<pre><code>rabbitmq-plugins enable rabbitmq_management
+</code></pre>
+<pre><code>浏览器访问http://127.0.0.1:15672
+</code></pre>
+<p>安装MySQL</p>
+<h3 id="初始化配置">初始化配置</h3>
+<pre><code>sudo mysql_secure_installation
+</code></pre>
+<pre><code>#1
+VALIDATE PASSWORD PLUGIN can be used to test passwords...
+Press y|Y for Yes, any other key for No: N (我的选项)
+
+#2
+Please set the password for root here...
+New password: (输入密码)
+Re-enter new password: (重复输入)
+
+#3
+By default, a MySQL installation has an anonymous user,
+allowing anyone to log into MySQL without having to have
+a user account created for them...
+Remove anonymous users? (Press y|Y for Yes, any other key for No) : N (我的选项)
+
+#4
+Normally, root should only be allowed to connect from
+'localhost'. This ensures that someone cannot guess at
+the root password from the network...
+Disallow root login remotely? (Press y|Y for Yes, any other key for No) : Y (我的选项)
+
+#5
+By default, MySQL comes with a database named 'test' that
+anyone can access...
+Remove test database and access to it? (Press y|Y for Yes, any other key for No) : N (我的选项)
+
+#6
+Reloading the privilege tables will ensure that all changes
+made so far will take effect immediately.
+Reload privilege tables now? (Press y|Y for Yes, any other key for No) : Y (我的选项)
+--------------------- 
+</code></pre>
+<pre><code>systemctl status mysql.service
+</code></pre>
+<p>配置远程访问</p>
+<pre><code>sudo mysql -uroot -p
+
+</code></pre>
+<pre><code>GRANT ALL PRIVILEGES ON *.* TO root@localhost IDENTIFIED BY &quot;houjie123&quot;;
+</code></pre>
+<p>其中<code>root@localhos</code>，<code>localhost</code>就是本地访问，配置成<code>%</code>就是所有主机都可连接；</p>
+<p>第二个<code>'houjie123'</code>为你给新增权限用户设置的密码，<code>%</code>代表所有主机，也可以是具体的ip；<br>
+不过这随设置了<code>%</code>但我root通过工具还是登陆不进去，可能是为了安全性，所以新建数据库和用户</p>
+<p>新建数据库和用户</p>
+<pre><code>##1 创建数据库git
+CREATE DATABASE git;
+##2 创建用户houjie(密码houjie) 并允许houjie用户可以从任意机器上登入mysql的git数据库
+GRANT ALL PRIVILEGES ON git.* TO houjie@&quot;%&quot; IDENTIFIED BY &quot;houjie&quot;; 
+</code></pre>
+<p>mysql 配置文件相关内容</p>
+<p>在/etc/mysql目录下面</p>
+<p>但是/etc/mysql/my.cnf参数文件下面没有任何参数设置，只看到下面两行设置，表示导入这两个目录里面的配置文件。</p>
+<p>!includedir /etc/mysql/conf.d/</p>
+<p>#表示包含/etc/mysql/conf.d/这个路径下面的配置文件，前提是必须以为.cnf为后缀</p>
+<p>!includedir /etc/mysql/mysql.conf.d/</p>
+<p>#表示包含/etc/mysql/mysql.conf.d/这个路径下面的配置文件，前提是必须以为.cnf为后缀</p>
+<p>其实MySQL的相关配置都位于mysqld.cnf（/etc/mysql/mysql.conf.d/mysqld.cnf）下面。使用相关参数测试了一下，确实都能生效。这种设置确实有点让刚接触的人有点不适应。暂时先总结到此！</p>
+<p>查看当前mysql 的字符集设置</p>
+<pre><code>SHOW VARIABLES WHERE Variable_name LIKE 'character\_set\_%' OR Variable_name LIKE 'collation%';
+</code></pre>
+<p>修改数据库的默认字符集位utf8mb4</p>
+<pre><code>ALTER DATABASE database_name CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE">初始化配置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yuuri/post/blog-ji-lu">
+              <h3 class="post-title">
+                blog记录
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yuuri/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

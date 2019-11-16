@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>Numpy 中的省略号 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,21 +73,48 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              Numpy 中的省略号
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-09-20
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>在看sklearn代码关于线性模型中看到了一个代码中出现了<code>x[..., 1]</code> 这样子的代码。在平常的使用中会有<code>x[:,1]</code>这样的例子，但是<code>x[...,1]</code>这样的例子还是第一次遇到。</p>
+<p>同时发现Python自带的list不支持这样的用法，应该是Numpy特有的方法。</p>
+<p>查阅文档后发现是这么描述的</p>
+<p>The <strong>dots</strong> (<code>...</code>) represent as many colons as needed to produce a complete indexing tuple. For example, if <code>x</code> is an array with 5 axes, then</p>
+<ul>
+<li>
+<p><code>x[1,2,...]</code> is equivalent to <code>x[1,2,:,:,:]</code>,</p>
+</li>
+<li>
+<p><code>x[...,3]</code> to <code>x[:,:,:,:,3]</code> and</p>
+</li>
+<li>
+<p><code>x[4,...,5,:]</code> to <code>x[4,:,:,5,:]</code>.</p>
+<pre><code>&gt;&gt;&gt; c = np.array( [[[  0,  1,  2],               # a 3D array (two stacked 2D arrays)
+...                 [ 10, 12, 13]],
+...                [[100,101,102],
+...                 [110,112,113]]])
+&gt;&gt;&gt; c.shape
+(2, 2, 3)
+&gt;&gt;&gt; c[1,...]                                   # same as c[1,:,:] or c[1]
+array([[100, 101, 102],
+       [110, 112, 113]])
+&gt;&gt;&gt; c[...,2]                                   # same as c[:,:,2]
+array([[  2,  13],
+       [102, 113]])
+</code></pre>
+</li>
+</ul>
 
               </div>
               <div class="toc-container">
@@ -100,9 +127,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/mysql-dao-chu-cha-xun-jie-guo-dao-wen-jian">
               <h3 class="post-title">
-                更新vim到8.1
+                MySQL 导出查询结果到文件
               </h3>
             </a>
           </div>

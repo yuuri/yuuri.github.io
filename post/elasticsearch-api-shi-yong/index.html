@@ -1,0 +1,302 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Elasticsearch API使用 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yuuri/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yuuri">
+  <img class="avatar" src="https://github.com/yuuri/images/avatar.png?v=1573876898580" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Elasticsearch API使用
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-13
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>记录了一些Elasticsearch 常见的RESTful API</p>
+<!-- more --> 
+<p>1.创建索引</p>
+<pre><code>curl -X PUT 'http://localhost:9200/{索引名}'
+</code></pre>
+<p>2.查看已创建的所有索引</p>
+<pre><code>curl -X GET 'http://localhost:9200/_cat/indices?v&amp;pretty'
+</code></pre>
+<p>3.索引一个文档</p>
+<pre><code>curl -H 'Content-Type:application/json' -X POST 'http://localhost:9200/{索引名}/{type类型名}/{文档id}?pretty' -d '{&quot;name&quot;:&quot;test&quot;}'
+</code></pre>
+<ul>
+<li>创建索引文档是可以不必先创建索引，索引文档是会自动创建搜索引，如果创建索引文档时索引不存在的情况下。</li>
+<li>在当前版本使用curl命令索引文档需要手动指定type类型为_doc</li>
+<li>一个索引最好只有一个类型</li>
+<li><strong>从6.0.0开始限定仅包含一个映射类别定义（ &quot;index.mapping.single_type&quot;: true ），兼容5.x中的多映射类别。从7.0开始将移除映射类别。</strong><br>
+<strong>为了与未来的规划匹配，请现在将这个唯一的映射类别名定义为“_doc”,因为索引的请求地址将规范为：PUT {index}/_doc/{id} and POST {index}/_doc</strong></li>
+</ul>
+<p>4.查询指定的文档</p>
+<pre><code>curl -X GET 'http://localhost:9200/{索引名}/{type类型}/{文档id}'
+</code></pre>
+<p>只查询指定的字段</p>
+<pre><code>curl -X GET 'localhost:9200/test_index/_doc/1/_source?pretty'
+</code></pre>
+<p>5.删除索引</p>
+<pre><code>curl -X DELETE 'http://localhost:9200/{索引名}？pretty&amp;pretty'
+</code></pre>
+<p>6.查看cluster状态</p>
+<pre><code>curl -X GET 'http://localhost:9200/_cat/health?v&amp;pretty'
+</code></pre>
+<p>7.查看分片状态</p>
+<pre><code>curl -X GET 'http://localhost:9200/_cluster/health?pretty'
+</code></pre>
+<p>8.获取集群节点列表</p>
+<pre><code>curl -X GET 'http://localhost:9200/_cat/nodes?v&amp;pretty'
+</code></pre>
+<p>9.1.索引替换文档内容，指定相同文档id即可替换</p>
+<pre><code>curl -H 'Content-Type:application/json' -X PUT 'http://localhost:9200/{索引名}/{type类型}/{文档id}' -d '{&quot;name&quot;:&quot;test2&quot;}'
+</code></pre>
+<p>9.2更新文档</p>
+<pre><code>curl -H 'Content-Type:application/json' -X POST 'http://localhost:9200/test_index/_doc/1/_update?pretty' -d '{&quot;doc&quot;:{&quot;name&quot;:&quot;test3&quot;}}'
+</code></pre>
+<p>9.3更新文档同时添加新的字段</p>
+<pre><code>curl -H 'Content-Type:application/json' -X POST 'http://localhost:9200/test_index/_doc/1/_update?pretty' -d '{&quot;doc&quot;:{&quot;name&quot;:&quot;hide&quot;,&quot;age&quot;:34}}'
+</code></pre>
+<p>10.1删除文档（通过指定id来进行删除）</p>
+<pre><code>curl -X DELETE 'http://localhost:9200/test_index/_doc/JTt-YmoBHEwUVvFEdcB3?pretty'
+</code></pre>
+<p>10.2删除文档（通过查询来进行删除）</p>
+<pre><code>curl -H 'Content-Type:application/json' -X POST 'localhost:9200/test_index/_doc/_delete_by_query?pretty' -d '{&quot;query&quot;:{&quot;match&quot;:{&quot;name&quot;:&quot;delete&quot;}}}'
+</code></pre>
+<p>11.1批处理（索引文档）</p>
+<pre><code>curl -H 'Content-Type:application/json' -X POST 'localhost:9200/test_index/_doc/_bulk?pretty' -d '{&quot;index&quot;:{&quot;_id&quot;:&quot;4&quot;}}{&quot;name&quot;:&quot;uchida&quot;}{&quot;index&quot;:{&quot;id&quot;:&quot;5&quot;}}{&quot;name:&quot;mushroom&quot;}'
+</code></pre>
+<ul>
+<li>body中需要添加换行</li>
+</ul>
+<p>11.2批处理（更新）</p>
+<pre><code>curl -H 'Content-Type&quot;:application/json' -X POST 'localhost:9200/test_index/_doc/_bulk?pretty' -d '
+{&quot;update&quot;:{&quot;_id&quot;:&quot;1&quot;}}
+{&quot;doc&quot;:{&quot;name&quot;:&quot;update_test&quot;}}
+{&quot;update&quot;:{&quot;_id&quot;:1}}
+{&quot;doc&quot;:{&quot;age&quot;:&quot;23&quot;}}
+'
+</code></pre>
+<p>11.3批处理（导入）</p>
+<pre><code>curl -H 'Content-Type:application/json' -X POST 'localhost:9200/bank/account/_bulk?pretty&amp;fresh'--data-binary &quot;@account.json 
+curl -X GET 'localhost:9200/_cat/indices?v
+</code></pre>
+<p>12.1 搜索(搜索全部)</p>
+<pre><code>curl -X GET 'localhost:9200/bank/_search?q=*&amp;sort=account_number:asc&amp;pretty'
+</code></pre>
+<pre><code>curl -H 'Content-Type:application/json' -X GET 'localhost:9200/bank/_search?pretty' -d '
+{
+&quot;query&quot;:{&quot;match_all&quot;:{}},
+&quot;sort&quot;:{&quot;account_number&quot;:&quot;asc&quot;}
+}
+'
+</code></pre>
+<p>在响应中，我们可以看到以下几个部分 :</p>
+<ul>
+<li><strong>took</strong> - <strong>Elasticsearch</strong> 执行搜索的时间（毫秒）</li>
+<li><strong>time_out</strong> - 告诉我们搜索是否超时</li>
+<li><strong>_shards</strong> - 告诉我们多少个分片被搜索了，以及统计了成功/失败的搜索分片</li>
+<li><strong>hits</strong> - 搜索结果</li>
+<li><strong>hits.total</strong> - 搜索结果</li>
+<li><strong>hits.hits</strong> - 实际的搜索结果数组（默认为前 <strong>10</strong> 的文档）</li>
+<li><strong>sort</strong> - 结果的排序 <strong>key</strong>（键）（没有则按 <strong>score</strong> 排序）</li>
+<li><em><strong>score</strong></em> 和 <strong>max_score</strong> -现在暂时忽略这些字段</li>
+</ul>
+<p>12.2搜索(条件)</p>
+<ul>
+<li>匹配指定字段</li>
+</ul>
+<pre><code> curl -H 'Content-Type:application/json' -X GET 'localhost:9200/bank/_search?pretty' -d '{&quot;query&quot;:{&quot;match&quot;:{&quot;account_number&quot;:&quot;20&quot;}}}'
+</code></pre>
+<ul>
+<li>匹配多个字段</li>
+</ul>
+<pre><code>curl -H 'Content-Type:application/json' -X GET 'localhost:9200/bank/_search?pretty' -d {&quot;query&quot;:{&quot;match&quot;:{&quot;address&quot;:&quot;mill lane&quot;}}}
+match匹配多个字段为或关系
+</code></pre>
+<pre><code>curl -H 'Content-Type:application/json' -X GET 'localhost:9200/bank/_search?pretty' -d {&quot;query&quot;:{&quot;match_phrase&quot;:{&quot;address&quot;:&quot;mill lane&quot;}}}
+match_phrase匹配字段之间为与关系
+</code></pre>
+<ul>
+<li><strong>bool</strong> 查询</li>
+</ul>
+<pre><code>curl -H 'Content-Type:application/json' -X GET 'localhost:9200/bank/_search?pretty' -d '{&quot;query&quot;:{&quot;bool&quot;:{&quot;must&quot;:[{&quot;match&quot;:{&quot;address&quot;:&quot;mill&quot;}},{&quot;match&quot;:{&quot;address&quot;:&quot;lane&quot;}}]}}}'
+</code></pre>
+<pre><code>curl -H 'Content-Type:application/json' -X GET 'localhost:9200/bank/_search?pretty' -d '{&quot;query&quot;:{&quot;bool&quot;:{&quot;should&quot;:[{&quot;match&quot;:{&quot;address&quot;:&quot;mill&quot;}},{&quot;match&quot;:{&quot;address&quot;:&quot;lane&quot;}}]}}}'
+</code></pre>
+<pre><code>curl -H 'Content-Type:application/json' -X GET 'localhost:9200/bank/_search?pretty' -d '{&quot;query&quot;:{&quot;bool&quot;:{&quot;must_not&quot;:[{&quot;match&quot;:{&quot;address&quot;:&quot;mill&quot;}},{&quot;match&quot;:{&quot;address&quot;:&quot;lane&quot;}}]}}}'
+</code></pre>
+<ul>
+<li><strong>must</strong> 查询到全为<strong>True</strong>的值</li>
+<li><strong>should</strong> 查询到有一个或多个<strong>True</strong>的值</li>
+<li><strong>must_not</strong> 查询到全不为<strong>True</strong>的值</li>
+</ul>
+<p>13.过滤</p>
+<pre><code>curl -H 'Content-Type:application/json' -X GET 'localhost:9200/bank/_search?pretty' -d '{&quot;query&quot;:{&quot;bool&quot;:{&quot;must&quot;:{&quot;match_all&quot;:{}},&quot;filter&quot;:{&quot;range&quot;:{&quot;balance&quot;:{&quot;gte&quot;:&quot;20000&quot;,&quot;lte&quot;:&quot;30000&quot;}}}}}}'
+</code></pre>
+<p>优化参数</p>
+<p>1.调整translog同步策略</p>
+<p>默认情况下，translog的持久化策略是，对于每个写入请求都做一次flush，刷新translog数据到磁盘上。这种频繁的磁盘IO操作是严重影响写入性能的，如果可以接受一定概率的数据丢失（这种硬件故障的概率很小），可以通过下面的命令调整 translog 持久化策略为异步周期性执行，并适当调整translog的刷盘周期。</p>
+<pre><code>curl -H “Content-Type:application/json” -X PUT  &quot;localhost:9200/{index名称}/&quot; -d '{&quot;settings&quot;: {&quot;index&quot;: {&quot;translog&quot;: {&quot;sync_interval&quot;: &quot;5s&quot;,&quot;durability&quot;: &quot;async&quot;}}}}'
+</code></pre>
+<p>2.调整refresh_interval</p>
+<p>写入Lucene的数据，并不是实时可搜索的，ES必须通过refresh的过程把内存中的数据转换成Lucene的完整segment后，才可以被搜索。默认情况下，ES每一秒会refresh一次，产生一个新的segment，这样会导致产生的segment较多，从而segment merge较为频繁，系统开销较大。如果对数据的实时可见性要求较低，可以通过下面的命令提高refresh的时间间隔，降低系统开销</p>
+<pre><code>curl -H &quot;Content-Type:application/json&quot; -X PUT &quot;localhost:9200/aaaaaa11&quot; -d '{&quot;settings&quot;:{&quot;index&quot;:{&quot;refresh_interval&quot;:&quot;30s&quot;}}}'
+</code></pre>
+<p><strong>4.</strong> <strong>merge<strong><strong>并发</strong></strong>控制</strong></p>
+<p>ES的一个index由多个shard组成，而一个shard其实就是一个Lucene的index，它又由多个segment组成，且Lucene会不断地把一些小的segment合并成一个大的segment，这个过程被称为merge。当节点配置的cpu核数较高时，merge占用的资源可能会偏高，影响集群的性能，可以通过下面的命令调整某个index的merge过程的并发度：</p>
+<pre><code>curl -H &quot;Content-Type:application/json&quot; -X PUT &quot;localhost:9200/bank/_settings&quot; -d '{&quot;index.merge.scheduler.max_thread_count&quot;:2}'
+</code></pre>
+<p>安装</p>
+<p>1.确认JDK版本</p>
+<p>2.安装ES</p>
+<pre><code>curl -L -O 
+https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.0.1-linux-x86_64.tar.gz
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yuuri/post/elasticsearch-ji-ben-yuan-li">
+              <h3 class="post-title">
+                Elasticsearch 基本原理
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yuuri/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

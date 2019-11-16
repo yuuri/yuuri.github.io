@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>db2 问题汇总 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,11 +73,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              db2 问题汇总
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-05-16
               </span>
               <span>
                 1 min read
@@ -87,7 +87,23 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>1.安装程序启动时提示</p>
+<pre><code>   The required library file libaio.so.1 is not found on the system.
+   Check the following web site for the up-to-date system requirements
+   of IBM DB2 9.7
+</code></pre>
+<blockquote>
+<p>libaio-dev包的作用是为了支持同步I/O。对于数据库之类的系统特别重要，因此在Ubuntu在上安张数据库软件，比如oracle之前，需要安装该包。</p>
+</blockquote>
+<p>手动执行安装</p>
+<pre><code>sudo apt-get install libaio-dev
+</code></pre>
+<p>2.创建Schema</p>
+<pre><code>create schema Schema_name
+</code></pre>
+<p>设置当前Schema</p>
+<pre><code>set schema Schema_name
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -100,9 +116,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/python-di-san-fang-ku-chi-xian-an-zhuang">
               <h3 class="post-title">
-                更新vim到8.1
+                Python第三方库离线安装
               </h3>
             </a>
           </div>

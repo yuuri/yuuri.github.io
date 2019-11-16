@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | Gridea</title>
+<title>使用云主机搭建Shadowsocks服务 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,11 +73,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              使用云主机搭建Shadowsocks服务
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-05-19
               </span>
               <span>
                 1 min read
@@ -87,7 +87,23 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>对数据库，操作系统感兴趣。</p>
+                <p>1.首先可以使用Google BBR 服务加速网络</p>
+<p>使用root 用户执行命令</p>
+<pre><code class="language-shell">wget --no-check-certificate https://github.com/yuuri/across/raw/master/bbr.sh
+chmod +x bbr.sh
+./bbr.sh
+</code></pre>
+<p>执行完成之后，会提示需要重启，按y重启即可。</p>
+<p>重启之后，执行命令</p>
+<pre><code>lsmod | grep bbr
+</code></pre>
+<p>命令执行结果中有tcp_bbr，即说明命令执行成功。</p>
+<p>2.执行命令</p>
+<pre><code>wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
+chmod +x shadowsocks-all.sh
+./shadowsocks-all.sh 2&gt;&amp;1 | tee shadowsocks-all.log
+</code></pre>
+<p>使用上面命令即可安装。根据提示设置自己的密码，端口以及加密方式即可。</p>
 
               </div>
               <div class="toc-container">
@@ -100,9 +116,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yuuri/post/geng-xin-vim-dao-81">
+            <a href="https://github.com/yuuri/post/redis-she-ji-yu-shi-xian-xue-xi-bi-ji-1">
               <h3 class="post-title">
-                更新vim到8.1
+                Redis 设计与实现 学习笔记-1
               </h3>
             </a>
           </div>

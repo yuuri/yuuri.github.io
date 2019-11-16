@@ -1,0 +1,424 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MySQL语句1 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/yuuri/favicon.ico?v=1573876898580">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yuuri/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yuuri">
+  <img class="avatar" src="https://github.com/yuuri/images/avatar.png?v=1573876898580" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              MySQL语句1
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-23
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h3 id="mysql命令">MySQL命令</h3>
+<hr>
+<p>[TOC]</p>
+<h4 id="1使用mysql">1.使用MySQL</h4>
+<p>显示表中可用的<strong>Column</strong></p>
+<pre><code class="language-mysql">show columns from git_project;
+</code></pre>
+<p>输出如下</p>
+<pre><code>+--------------+--------------+------+-----+---------------------+----------------+
+| Field        | Type         | Null | Key | Default             | Extra          |
++--------------+--------------+------+-----+---------------------+----------------+
+| id           | int(11)      | NO   | PRI | NULL                | auto_increment |
+| project_name | varchar(100) | YES  |     | NULL                |                |
+| project_id   | int(11)      | YES  |     | NULL                |                |
+| project_url  | varchar(100) | YES  |     | NULL                |                |
+| project_date | timestamp    | YES  |     | NULL                |                |
+| created_at   | timestamp    | NO   |     | 0000-00-00 00:00:00 |                |
++--------------+--------------+------+-----+---------------------+----------------+
+6 rows in set (0.00 sec)
+</code></pre>
+<blockquote>
+<p>MySQL支持DESCRIBE作为SHOW COLUMNS FROM 的一种快捷方式。也就是说DESCRIBE git_project 是SHOW COLUMNS FROM git_project的一种快捷方式</p>
+</blockquote>
+<p>DESC 和ASC分别是对结果进行降序和升序排序，但是如果执行DESC git_project发现 和SHOW COLUMN FROM git_project 以及 DESCRIBE git_project 的输出结果是一样的。</p>
+<h5 id="显示服务器状态">显示服务器状态</h5>
+<pre><code>SHOW STATUS
+</code></pre>
+<h5 id="显示创建数据库或者创建表的语句">显示创建数据库或者创建表的语句</h5>
+<pre><code>SHOW CREATE DATABASES
+</code></pre>
+<pre><code>SHOW CREATE TABLE
+</code></pre>
+<h5 id="显示授予用户的权限">显示授予用户的权限</h5>
+<pre><code>SHOW GRANTS
+</code></pre>
+<h5 id="显示服务器错误或者警告信息">显示服务器错误或者警告信息</h5>
+<pre><code>SHOW ERRORS
+</code></pre>
+<pre><code>SHOW WARNINGS
+</code></pre>
+<hr>
+<h4 id="2检索数据">2.检索数据</h4>
+<p><strong>SQL语句是不区分大小写的，因此SELECT 和select是一样的。通常对SQL关键字使用大写，对数据库名，表名，字段名使用小写。这样做是代码更易于阅读和调试。</strong></p>
+<h5 id="检索不同的行使用distinct关键字">检索不同的行（使用DISTINCT关键字）</h5>
+<pre><code>select distinct pull_number from commits;
+</code></pre>
+<p>(1).<strong>如果使用DISTINCT关键字 它必须直接放在列名前</strong></p>
+<p>(2).不能部分使用DISTINCT关键字，例如</p>
+<pre><code>select distinct a,b from tableA limit 10;
+</code></pre>
+<p>除非指定的两个列都不同，否则所有行将被输出</p>
+<p>此时是将a,b两列所有不同的组合全部列出来，而不仅仅只是distinct a</p>
+<p>相当于以下语句</p>
+<pre><code class="language-mysql">select a,b,c from tableA group by a,b,c
+</code></pre>
+<p>实际结果如下：</p>
+<pre><code>+-------------+----+
+| pull_number | id |
++-------------+----+
+|        1061 |  1 |
+|        1061 |  2 |
+|        1061 |  3 |
+|        1061 |  4 |
+|        1001 |  5 |
+|         634 |  6 |
+|        1036 |  7 |
+|         917 |  8 |
+|         693 |  9 |
+|         591 | 10 |
++-------------+----+
+10 rows in set (0.00 sec)
+</code></pre>
+<p>通过如下验证，可知所有行都被输出。</p>
+<pre><code>mysql&gt; select count(1) from commits;
++----------+
+| count(1) |
++----------+
+|    22788 |
++----------+
+1 row in set (0.00 sec)
+
+
+mysql&gt; select count(distinct pull_number,id ) from commits ;
++---------------------------------+
+| count(distinct pull_number,id ) |
++---------------------------------+
+|                           22788 |
++---------------------------------+
+1 row in set (0.01 sec)
+
+</code></pre>
+<h5 id="限制结果limit-关键字">限制结果（LIMIT 关键字）</h5>
+<pre><code>select distinct pull_number from commits limit 10;
+</code></pre>
+<p>LIMIT 后跟显示显示的条数</p>
+<p>(1).检索出来的第一行是行0,而不是行1。</p>
+<p>(2).行数小于限制数，则只会显示实际的行数</p>
+<hr>
+<h4 id="3排序检索数据">3.排序检索数据</h4>
+<h5 id="使用order-by">使用ORDER BY</h5>
+<p>ORDER BY 可以取一个或多个列的名字，据此进行输出。</p>
+<pre><code>select * from commits order by project,pull_number,commit_date limit 2；
+</code></pre>
+<p>结果如下：</p>
+<pre><code>mysql&gt; select * from commits order by project,pull_number,commit_date limit 2\G;
+*************************** 1. row ***************************
+         id: 18343
+pull_number: 11
+ commit_sha: 930d44d79fcc687070d63cdfd1497556572004e5
+ commit_msg: support to log null and undefined to the repl from an extension (fixes #9)
+commit_date: 2015-11-16 06:42:04
+ user_email: benjpas@microsoft.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+*************************** 2. row ***************************
+         id: 18328
+pull_number: 25
+ commit_sha: a8c6596266df01acd4fac3529091795476f0cec7
+ commit_msg: C# bracket insertion, indentation not working #4
+commit_date: 2015-11-16 09:48:04
+ user_email: martinae@microsoft.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+2 rows in set (0.00 sec)
+
+ERROR: 
+No query specified
+</code></pre>
+<p>默认是升序排序，如果要是用降序排序可使用desc</p>
+<p>如果想要对多个列进行降序排序，必须显性的对每一个列进行进行指定。</p>
+<h5 id="order-by-的位置">ORDER BY 的位置</h5>
+<p>ORDER BY 必须在FROM 之后 LIMIT之前</p>
+<p>使用group by 报错1055</p>
+<p><a href="https://blog.csdn.net/qq_34581118/article/details/78228262">https://blog.csdn.net/qq_34581118/article/details/78228262</a></p>
+<hr>
+<h4 id="4过滤数据">4.过滤数据</h4>
+<p>使用WHERE 过滤数据</p>
+<h5 id="1where-子句在from之后">1.WHERE 子句在FROM之后，</h5>
+<pre><code>select * from commits where pull_number between 100 and 2000 order by pull_number asc limit 10\G;
+</code></pre>
+<p>如果使用WHERE,应该让ORDER BY 在WHERE 之后，否则会发生错误。</p>
+<h5 id="2不匹配检查">2.不匹配检查</h5>
+<pre><code>select * from commits where project &lt;&gt; 'TheAlgorithms/Python' and pull_number between 100 and 2000 order by pull_number limit 10\G;
+</code></pre>
+<h6 id="不匹配检查可以使用-符号-也可以使用-这两个符号效果是一样的">不匹配检查可以使用 &lt;&gt; 符号 也可以使用！= 这两个符号效果是一样的。</h6>
+<h6 id="where-子句可以用and-或者or-操作符来进行多个条件匹配">WHERE 子句可以用AND 或者OR 操作符来进行多个条件匹配</h6>
+<h5 id="3空值检查">3.空值检查</h5>
+<pre><code>select * from commits where pull_number is NULL;
+</code></pre>
+<p>如果不存在NULL值则返回为空，</p>
+<blockquote>
+<p><strong>NULL与不匹配</strong> 在通过过滤选择出不具有特定值的行时，你<br>
+可能希望返回具有NULL值的行。但是，不行。因为未知具有<br>
+特殊的含义，数据库不知道它们是否匹配，所以在匹配过滤<br>
+或不匹配过滤时不返回它们。<br>
+因此，在过滤数据时，一定要验证返回数据中确实给出了被<br>
+过滤列具有NULL的行。</p>
+</blockquote>
+<h5 id="计算次序">计算次序</h5>
+<p>有这样一个SQL语句</p>
+<pre><code>select * from commits where pull_number = 70748 or pull_number = 105 and id &gt; 10000 limit 2;
+</code></pre>
+<p>结果如下</p>
+<pre><code class="language-fortran">*************************** 1. row ***************************
+         id: 7373
+pull_number: 70748
+ commit_sha: 2f89a79efe43f5d9bd82071f4dab514cf82a379a
+ commit_msg: api proposal, add call hierarchy contrib
+commit_date: 2019-03-14 15:14:04
+ user_email: johannes.rieken@gmail.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+*************************** 2. row ***************************
+         id: 7374
+pull_number: 70748
+ commit_sha: c9a8a1d08fd81ba9d5cbcc5b75d7e1b7a25cc8a4
+ commit_msg: simple tree UX
+commit_date: 2019-03-14 16:56:05
+ user_email: johannes.rieken@gmail.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+2 rows in set (0.00 sec)
+
+</code></pre>
+<p>发现结果未按预期执行，原因在于 SQL预先处理AND符号。因此条件过滤语句被理解为 pull_number = 70748所有值 和 pull_number =105 且id&gt;10000 的两个条件</p>
+<p>要按预期 执行可加上括号，如下</p>
+<pre><code>select * from commits where (pull_number = 70748 or pull_number = 100 ) and id &gt; 7374 limit 2\G
+</code></pre>
+<p>执行结果</p>
+<pre><code>*************************** 1. row ***************************
+         id: 7375
+pull_number: 70748
+ commit_sha: b01e65cf7fff893cea53f4d19b0afe19e1d78481
+ commit_msg: add action to context menu
+commit_date: 2019-03-15 09:15:02
+ user_email: johannes.rieken@gmail.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+*************************** 2. row ***************************
+         id: 7376
+pull_number: 70748
+ commit_sha: 3a3b62c1cbc6243c19f2adda14722e0fe44cf085
+ commit_msg: show calls as columns
+commit_date: 2019-03-15 14:55:01
+ user_email: johannes.rieken@gmail.com
+    project: microsoft/vscode
+ created_at: 2019-09-21 10:14:10
+2 rows in set (0.01 sec)
+
+</code></pre>
+<blockquote>
+<p><strong>在WHERE子句中使用圆括号</strong> 任何时候使用具有AND和OR操作<br>
+符的WHERE子句，都应该使用圆括号明确地分组操作符。不要<br>
+过分依赖默认计算次序，即使它确实是你想要的东西也是如<br>
+此。使用圆括号没有什么坏处，它能消除歧义</p>
+</blockquote>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#mysql%E5%91%BD%E4%BB%A4">MySQL命令</a>
+<ul>
+<li><a href="#1%E4%BD%BF%E7%94%A8mysql">1.使用MySQL</a>
+<ul>
+<li><a href="#%E6%98%BE%E7%A4%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8A%B6%E6%80%81">显示服务器状态</a></li>
+<li><a href="#%E6%98%BE%E7%A4%BA%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E6%88%96%E8%80%85%E5%88%9B%E5%BB%BA%E8%A1%A8%E7%9A%84%E8%AF%AD%E5%8F%A5">显示创建数据库或者创建表的语句</a></li>
+<li><a href="#%E6%98%BE%E7%A4%BA%E6%8E%88%E4%BA%88%E7%94%A8%E6%88%B7%E7%9A%84%E6%9D%83%E9%99%90">显示授予用户的权限</a></li>
+<li><a href="#%E6%98%BE%E7%A4%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%94%99%E8%AF%AF%E6%88%96%E8%80%85%E8%AD%A6%E5%91%8A%E4%BF%A1%E6%81%AF">显示服务器错误或者警告信息</a></li>
+</ul>
+</li>
+<li><a href="#2%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE">2.检索数据</a>
+<ul>
+<li><a href="#%E6%A3%80%E7%B4%A2%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A1%8C%E4%BD%BF%E7%94%A8distinct%E5%85%B3%E9%94%AE%E5%AD%97">检索不同的行（使用DISTINCT关键字）</a></li>
+<li><a href="#%E9%99%90%E5%88%B6%E7%BB%93%E6%9E%9Climit-%E5%85%B3%E9%94%AE%E5%AD%97">限制结果（LIMIT 关键字）</a></li>
+</ul>
+</li>
+<li><a href="#3%E6%8E%92%E5%BA%8F%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE">3.排序检索数据</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8order-by">使用ORDER BY</a></li>
+<li><a href="#order-by-%E7%9A%84%E4%BD%8D%E7%BD%AE">ORDER BY 的位置</a></li>
+</ul>
+</li>
+<li><a href="#4%E8%BF%87%E6%BB%A4%E6%95%B0%E6%8D%AE">4.过滤数据</a>
+<ul>
+<li><a href="#1where-%E5%AD%90%E5%8F%A5%E5%9C%A8from%E4%B9%8B%E5%90%8E">1.WHERE 子句在FROM之后，</a></li>
+<li><a href="#2%E4%B8%8D%E5%8C%B9%E9%85%8D%E6%A3%80%E6%9F%A5">2.不匹配检查</a>
+<ul>
+<li><a href="#%E4%B8%8D%E5%8C%B9%E9%85%8D%E6%A3%80%E6%9F%A5%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8-%E7%AC%A6%E5%8F%B7-%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8-%E8%BF%99%E4%B8%A4%E4%B8%AA%E7%AC%A6%E5%8F%B7%E6%95%88%E6%9E%9C%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84">不匹配检查可以使用 &lt;&gt; 符号 也可以使用！= 这两个符号效果是一样的。</a></li>
+<li><a href="#where-%E5%AD%90%E5%8F%A5%E5%8F%AF%E4%BB%A5%E7%94%A8and-%E6%88%96%E8%80%85or-%E6%93%8D%E4%BD%9C%E7%AC%A6%E6%9D%A5%E8%BF%9B%E8%A1%8C%E5%A4%9A%E4%B8%AA%E6%9D%A1%E4%BB%B6%E5%8C%B9%E9%85%8D">WHERE 子句可以用AND 或者OR 操作符来进行多个条件匹配</a></li>
+</ul>
+</li>
+<li><a href="#3%E7%A9%BA%E5%80%BC%E6%A3%80%E6%9F%A5">3.空值检查</a></li>
+<li><a href="#%E8%AE%A1%E7%AE%97%E6%AC%A1%E5%BA%8F">计算次序</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yuuri/post/numpy-zhong-de-sheng-lue-hao">
+              <h3 class="post-title">
+                Numpy 中的省略号
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yuuri/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
